@@ -1,0 +1,19 @@
+@startuml
+
+Actor Patient as act 
+Participant System as sys
+
+activate act
+act -> sys : clicks confirmation link
+deactivate act
+
+activate sys
+sys --> act : operation sucess
+deactivate sys
+
+activate act
+
+
+
+
+@enduml

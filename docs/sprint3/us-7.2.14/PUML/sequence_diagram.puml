@@ -1,0 +1,39 @@
+@startuml
+
+participant Routing
+participant ClinicalDetailsController as ctrl
+participant ClinicalDetailsService as svc
+participant ClinicalDetailsDto as dto
+participant ClinicalDetailsRepository as repo
+
+-> Routing : GET(token, patientMRN)
+activate Routing
+    Routing -> ctrl : getClinicalDetailsByMRN(token, patientMRN)
+deactivate Routing
+
+activate ctrl
+    ctrl -> svc : filterByDomainID(patientMRN)
+deactivate ctrl
+
+activate svc
+    svc -> repo : findByDomainID(patientMRN)
+deactivate svc
+
+activate repo
+    repo --> svc : clinicalDetail
+deactivate repo
+
+activate svc
+    svc ->  dto** : clinicalDetails.toDto()
+    svc --> ctrl : clinicalDetailsDto
+deactivate svc
+
+activate ctrl
+    ctrl --> Routing : clinicalDetailsDto
+deactivate ctrl
+
+activate Routing
+    <--- Routing : clinicalDetailsDto
+deactivate Routing
+
+@enduml

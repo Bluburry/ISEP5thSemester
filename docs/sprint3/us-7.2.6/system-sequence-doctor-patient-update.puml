@@ -1,0 +1,33 @@
+@startuml
+
+actor Doctor as doctor
+actor System as sys
+
+
+activate doctor
+doctor -> sys : requests to update patient medical record
+deactivate doctor
+
+activate sys
+sys --> doctor : requests Patient
+deactivate sys
+
+activate doctor
+doctor -> sys : selects Patient
+deactivate doctor
+
+activate sys
+sys --> doctor : requests new ClinicalDetails (add + remove process)
+deactivate sys
+
+activate doctor
+doctor -> sys : sends new ClinicalDetails
+deactivate doctor
+
+activate sys
+sys --> doctor : shows requested updated ClinicalDetails
+deactivate sys
+
+activate doctor
+
+@enduml

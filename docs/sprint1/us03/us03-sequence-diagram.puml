@@ -1,0 +1,131 @@
+@startuml
+
+participant Routing 
+participant UserController as ctrl
+participant LoginCredentialsDto
+participant LoginService
+participant PatientService
+participant PatientRepository 
+participant UserService 
+participant UserDTO
+participant TokenService
+participant PatientBuilder 
+participant UserFactory 
+participant UserRepository
+participant TokenFactory 
+participant TokenRepository 
+participant EmailService 
+
+
+-> Routing : POST(userData)
+activate Routing
+Routing -> ctrl : registerUserPatient(userData) /\nregisterUserIAM()
+deactivate Routing
+activate ctrl
+    alt If IAM Registration was selected
+    ctrl --> ctrl : **[Gets Google Response Information]** 
+    ctrl -> LoginCredentialsDto** : create()
+    ctrl -> LoginService : TreatAuthenticateResult(claims)
+    deactivate ctrl
+    activate LoginService
+    LoginService --> ctrl : loginCredentials
+    deactivate LoginService
+    activate ctrl
+    end alt
+    ctrl -> PatientService : checkPatientProfileExistence(userID)
+    deactivate ctrl
+    activate PatientService
+        PatientService -> PatientRepository : getByIdAsync(userID)
+    deactivate PatientService
+    activate PatientRepository
+        PatientRepository --> PatientService : patience
+    deactivate PatientRepository
+    activate PatientService
+        PatientService --> ctrl : existingPatientProfile
+    deactivate PatientService
+alt If patientExistence == true
+activate ctrl
+    ctrl -> UserService : addWithPasswordAsync(userData)
+    deactivate ctrl
+    activate UserService
+        UserService -> UserFactory : createDeactivatedUser(username, role.PATIENT, emailAddress)
+    deactivate UserService
+    activate UserFactory
+        UserFactory --> UserService : userDto
+        deactivate UserFactory
+    activate UserService
+        UserService -> UserRepository : addAsync(user)
+    deactivate UserService
+    activate UserRepository
+        UserRepository --> UserService : user
+    deactivate UserRepository
+    activate UserService
+        UserService --> ctrl : userDto
+    deactivate UserService
+activate ctrl
+    ctrl -> PatientService : addUserToPatientProfile(existingPatientProfile.MRN,\nuserDto.EmailAddress)
+    deactivate ctrl
+    activate PatientService
+        PatientService -> UserRepository : getByIdAsync(userID)
+    deactivate PatientService
+    activate UserRepository
+        UserRepository --> PatientService : user
+    deactivate UserRepository
+    activate PatientService
+        PatientService -> PatientRepository : getByIdAsync(patientMRN)
+    deactivate PatientService
+    activate PatientRepository
+        PatientRepository --> PatientService : patient
+    deactivate PatientRepository
+    activate PatientService
+        PatientService --> PatientService : patient.addUser(user.id, user)
+        PatientService -> PatientRepository : update(patient)
+    deactivate PatientService
+    activate PatientRepository
+        PatientRepository --> PatientService : opperationSuccess
+    deactivate PatientRepository
+    activate PatientService
+        PatientService --> ctrl : opperationSuccess
+    deactivate PatientService
+activate ctrl
+    ctrl -> TokenService : generatePasswordValidationTokenAsync(user)
+    deactivate ctrl
+    activate TokenService
+        TokenService -> UserRepository : getByIdAsync(userDto.EmailAddress)
+    deactivate TokenService
+    activate UserRepository
+        UserRepository --> TokenService : user
+    deactivate UserRepository
+    activate TokenService
+        TokenService -> TokenFactory : createPasswordActivationToken(dateAndTime, user)
+    deactivate TokenService
+    activate TokenFactory
+        TokenFactory --> TokenService : token
+    deactivate TokenFactory
+    activate TokenService
+        TokenService -> TokenRepository : addAsync(token)
+    deactivate TokenService
+    activate TokenRepository
+        TokenRepository --> TokenService: token
+    deactivate TokenRepository
+    activate TokenService
+        TokenService -> TokenDTO** : create()
+        TokenService --> ctrl : tokenDTO
+    deactivate TokenService
+activate ctrl
+    alt if Manual Registration was selected
+    ctrl -> EmailService : sendEmailVerificationEmail(dto.Username, tokenDTO)
+    deactivate ctrl
+    activate EmailService
+        EmailService --> ctrl : opperationResult
+    deactivate EmailService
+    activate ctrl
+    end alt
+end alt
+    Routing <-- ctrl : opperationResultMessage
+deactivate ctrl
+activate Routing
+<-- Routing : opperationResultMessage
+deactivate Routing
+
+@enduml

@@ -1,0 +1,45 @@
+@startuml US-7.2.15_SD
+
+title Sequence Diagram - US 7.2.15
+
+participant Routing as rt
+participant SpecializationController as ctrl
+participant SpecializationService as serv
+participant SpecializationRepository as repo
+participant SpecializationDTO as dto
+
+-> rt : DELETE(code, authToken)
+activate rt
+
+rt -> ctrl : RemoveSpecialization(code, authToken)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : DeleteSpecialization(code)
+
+activate serv
+
+serv -> repo : GetByIdAsync(SpecializationCode)
+activate repo
+repo --> serv : Specialization
+deactivate repo
+
+serv -> repo : Remove(Specialization)
+activate repo
+repo --> serv : 
+deactivate repo
+
+serv -> dto** : create()
+serv --> ctrl : specializationDTO
+deactivate serv
+
+ctrl --> rt : specializationDTO
+deactivate ctrl
+
+<-- rt : specializationDTO
+deactivate rt
+
+@enduml

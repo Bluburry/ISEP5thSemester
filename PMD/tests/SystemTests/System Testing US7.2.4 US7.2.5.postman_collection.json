@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "ed5bf0ed-5248-4764-9597-d760515de3b3",
+		"name": "System Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39098142"
+	},
+	"item": [
+		{
+			"name": "US 7.2.5 - Testing",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "gTzTzlLJWE2plqap4wKCucSO25he8wX7xyvOzImS41orfq+7cMsvG+X3bv40JekHZorHEZ3jJhcX1uTH/1x7+3vpGGVMj695H6TgNNt98T4M5VqwQnLdTLZJ3kG0Cz02H380b33BHMYAFKd9ZZxr5+JZ1kyzyU5oCTA5bIU8HT76uX1vR5W5INNh5H3nSQ1G99nCzOCqThZ4zl3CNY6Ypjch7G7OjupMOlWlOPTnAXjnFzq+31+iEJUc55QLL6ZUExOYOWhSb58+KhC0UsyGvf65ZfoyFsaVZTnuMlJzPON2uJIMIQptucZGjkCj70X4yrxVpya/ySe2q1I2NIxDaQ==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/medical-conditions?code=&designation=&description=&symptoms=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"medical-conditions"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": ""
+						},
+						{
+							"key": "designation",
+							"value": ""
+						},
+						{
+							"key": "description",
+							"value": ""
+						},
+						{
+							"key": "symptoms",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US 7.2.4 - Testing",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "gTzTzlLJWE2plqap4wKCucSO25he8wX7xyvOzImS41orfq+7cMsvG+X3bv40JekHZorHEZ3jJhcX1uTH/1x7+3vpGGVMj695H6TgNNt98T4M5VqwQnLdTLZJ3kG0Cz02H380b33BHMYAFKd9ZZxr5+JZ1kyzyU5oCTA5bIU8HT76uX1vR5W5INNh5H3nSQ1G99nCzOCqThZ4zl3CNY6Ypjch7G7OjupMOlWlOPTnAXjnFzq+31+iEJUc55QLL6ZUExOYOWhSb58+KhC0UsyGvf65ZfoyFsaVZTnuMlJzPON2uJIMIQptucZGjkCj70X4yrxVpya/ySe2q1I2NIxDaQ==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"code\": \"123456788912\",\r\n  \"designation\": \"Insert Medical Condition Name\",\r\n  \"description\": \"Insert Description\",\r\n  \"symptoms\": \"Symptoms\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/medical-conditions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"medical-conditions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "US 7.2.6 - Testing",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "gTzTzlLJWE2plqap4wKCucSO25he8wX7xyvOzImS41orfq+7cMsvG+X3bv40JekHZorHEZ3jJhcX1uTH/1x7+3vpGGVMj695H6TgNNt98T4M5VqwQnLdTLZJ3kG0Cz02H380b33BHMYAFKd9ZZxr5+JZ1kyzyU5oCTA5bIU8HT76uX1vR5W5INNh5H3nSQ1G99nCzOCqThZ4zl3CNY6Ypjch7G7OjupMOlWlOPTnAXjnFzq+31+iEJUc55QLL6ZUExOYOWhSb58+KhC0UsyGvf65ZfoyFsaVZTnuMlJzPON2uJIMIQptucZGjkCj70X4yrxVpya/ySe2q1I2NIxDaQ==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"patientMRN\": \"202501000001\",\r\n  \"allergies\": [\r\n    {\r\n      \"id\": \"4A8Z.1\",\r\n      \"name\": \"PingasAllergy\",\r\n      \"description\": \"Test Allergy\"\r\n    }\r\n  ],\r\n  \"medicalConditions\": [\r\n    {\r\n      \"code\": 123456789,\r\n      \"designation\": \"Asthma\",\r\n      \"description\": \"Horrible\",\r\n      \"symptoms\": \"Shortness of breath\"\r\n    },\r\n    {\r\n      \"code\": 1234512789,\r\n      \"designation\": \"Pneumothorax\",\r\n      \"description\": \"[NO-DESCRIPTION-PROVIDED]\",\r\n      \"symptoms\": \"Shortness of breath\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/clinicalDetails/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"clinicalDetails",
+						"save"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

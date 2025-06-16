@@ -1,0 +1,46 @@
+@startuml US20_Domain_Model
+
+title US20 Relevant Domain Model
+
+Package SpecializationAggregate{
+	Entity Specialization <<(R,#0099FF) Root Entity>>{}
+
+	Class SpecializationName <<(V,#f09800) Unique Identifier>> {}
+}
+
+SpecializationName "1" --* "1" Specialization : identifies
+
+Package OperationTypeAggregate {
+	Entity OperationType <<(R,#0099FF) Root Entity>>{}
+
+	Class OperationTypeID <<(V,#f09800) Unique Identifier>> {}
+	Class OperationTypeName <<(V,#f04800) Value Object>> {}
+	Class EstimatedDuration <<(V,#f04800) Value Object>> {}
+	Class OperationTypeVersion <<(V,#f04800) Value Object>> {}
+	Class OperationTypeStartDate <<(V,#f04800) Value Object>> {}
+	Class OperationTypeEndDate <<(V,#f04800) Value Object>> {}
+	Class ActivationStatus <<(V,#f04800) Value Object>> {}
+
+	Entity RequiredSpecialist <<Entity>> {}
+	Class SpecialistCount <<(V,#f04800) Value Object>> {}
+
+	Entity OperationPhase <<Entity>> {}
+	Class PhaseName <<(V,#f04800) Value Object>> {}
+	Class PhaseDuration <<(V,#f04800) Value Object>> {}
+}
+
+OperationTypeID "1" --* "1"  OperationType
+OperationTypeName "1" -up-* "1" OperationType
+EstimatedDuration "1" -up-* "1" OperationType
+OperationTypeVersion "1" -up-* "1" OperationType
+OperationTypeStartDate "1" -left-* "1" OperationType
+OperationTypeEndDate "1" -right-* "1" OperationType
+ActivationStatus "1" --* "1" OperationType
+RequiredSpecialist "*" --* "1" OperationType
+RequiredSpecialist "*" --> "1" Specialization
+SpecialistCount "1" -- "1" RequiredSpecialist
+OperationPhase "*" --* "1" OperationType
+OperationPhase "*" -up- "1" PhaseName
+OperationPhase "*" -up- "1" PhaseDuration
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+
+actor ADMIN as admin
+participant RoomTypeController as ctrl
+participant RoomTypeService as svc
+participant RoomTypeFactory as fac
+participant RoomTypeDto as dto
+participant RoomTypeRepository as repo
+
+
+activate admin
+
+admin -> ctrl : request creation of room type
+deactivate admin
+activate ctrl
+
+
+
+ctrl --> admin : requests room type information
+deactivate ctrl
+activate admin
+
+admin -> ctrl : input room type information
+deactivate admin
+activate ctrl
+
+ctrl -> svc : create(code, designation, description)
+
+deactivate ctrl
+activate svc
+
+svc -> fac : create(code, designation, description)
+
+deactivate svc
+
+activate fac
+fac --> svc : room type
+deactivate fac
+activate svc
+
+svc -> repo : save(room type)
+deactivate svc
+activate repo
+repo --> svc : room type
+deactivate repo
+
+activate svc
+svc ->  dto** : toDto(room type)
+
+svc --> ctrl : room typeDto
+deactivate svc
+activate ctrl
+
+ctrl --> admin : operation result message
+deactivate ctrl
+activate admin
+
+@enduml

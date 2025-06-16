@@ -1,0 +1,61 @@
+@startuml US18_SD
+
+title Sequence Diagram - US 18
+
+participant Routing as rt
+participant RegisterOperationRequestController as ctrl
+participant OperationRequestService as serv
+participant OperationRequestRepository as repo
+participant StaffRepository as staffRepo
+participant DoctorRepository as docRepo
+participant OperationRequestDTO as dto
+
+-> rt : DELETE(id, authToken)
+activate rt
+
+rt -> ctrl : DeleteOperationRequest(id, token)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : DeleteOperationRequest(id, token)
+
+activate serv
+
+serv -> repo : GetRequestById(Id)
+activate repo
+repo --> serv : OperationRequest
+deactivate repo
+
+serv -> staffRepo : GetStaffByUser(Username)
+activate staffRepo
+staffRepo --> serv : Staff
+deactivate staffRepo
+
+serv -> docRepo : GetDoctorByLicenseNumber(LicenseNumber)
+activate docRepo
+docRepo --> serv : Doctor
+deactivate docRepo
+
+serv -> repo : Remove(OperationRequest)
+activate repo
+repo --> serv :
+deactivate repo
+
+serv -> dto** : Create()
+activate dto
+dto --> serv : OperationRequestDTO
+deactivate dto
+
+serv --> ctrl : OperationRequestDTO
+deactivate serv
+
+ctrl -> rt : operationResult
+deactivate ctrl
+
+<-- rt : operationResult
+deactivate rt
+
+@enduml

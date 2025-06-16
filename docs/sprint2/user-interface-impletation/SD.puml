@@ -1,0 +1,50 @@
+@startuml
+
+actor User as usr
+participant GenericComponent as comp
+participant GenericComponentService as svc
+participant GenericDto as dto
+participant Backend as back
+
+activate usr
+usr -> comp : performs operation
+deactivate usr
+
+activate comp
+
+ref over comp
+Token Validation see SSD-Validation
+end
+comp -> svc : handler(data, token)
+deactivate comp
+activate svc
+
+svc -> dto** : Create(data)
+
+
+svc -> back : HTTP_METHOD_CALL(authToken, dto)
+note right back
+Backend will receive the
+HTTP request and perform
+logic operations
+
+Here the backend logic is
+treated as a black box as
+it is architecturally irrelevant.
+end note
+deactivate svc
+activate back
+
+back --> svc : Ok(responseDto)
+deactivate back
+
+activate svc
+svc --> comp : dto
+deactivate svc
+activate comp
+
+comp --> usr
+deactivate comp
+activate usr
+
+@enduml

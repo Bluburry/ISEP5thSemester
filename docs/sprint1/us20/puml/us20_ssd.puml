@@ -1,0 +1,25 @@
+@startuml US20_SSD
+
+title System Sequence Diagram - US 20
+
+autonumber
+
+actor "Admin" as adm
+participant "System" as app
+
+activate adm
+
+	adm -> app : add new operation type
+	activate app
+		app --> adm : request operation info
+	deactivate app
+
+	adm -> app : inputs requested info
+	activate app
+		app --> adm : confirms operation type creation
+	deactivate app
+
+deactivate adm
+
+
+@enduml

@@ -1,0 +1,116 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant Routing as route
+participant PatientController as ctrl
+participant PatientService as svc
+participant PatientDto as dto
+participant PatientBuilder as patBuilder
+participant PatientRepository as patRepo
+participant LoggingService as logSvc
+
+-> route : POST(editPatientInfoDto, token)
+
+activate route
+route -> ctrl : EditPatientProfileAdmin(editPatientInfoDto, token)
+
+
+deactivate route
+activate ctrl
+
+ref over ctrl
+REFER TO GENERIC AUTH SD
+end
+
+ctrl -> svc : GetByIdAsync(id)
+deactivate ctrl
+
+activate svc
+svc -> patRepo : GetByIdAsync(id)
+
+deactivate svc
+activate patRepo
+patRepo --> svc : patient
+deactivate patRepo
+
+activate svc
+
+svc -> dto** : create()
+svc --> ctrl : patientDto
+deactivate svc
+activate ctrl
+
+ctrl -> svc : EditPatientProfile(editPatientInfoDto)
+deactivate ctrl
+activate svc
+
+
+
+svc -> patRepo : GetByIdAsync(medicalRecordNumber)
+
+deactivate svc
+activate patRepo
+
+patRepo --> svc: patient
+deactivate patRepo
+activate svc
+
+svc -> patBuilder** : create(patient)
+
+svc -> patBuilder : UpdatePatientWithData(editPatientInfoDto)
+deactivate svc
+activate patBuilder
+
+patBuilder --> svc : patient
+deactivate patBuilder
+activate svc
+
+svc -> patRepo : Update(patient)
+deactivate svc
+activate patRepo
+patRepo --> svc : patient
+deactivate patRepo
+activate svc
+
+svc -> dto** :create()
+
+
+
+svc --> ctrl : patientDto
+deactivate svc
+activate ctrl
+
+alt IF SENSITIVE INFORMATION WAS ALTERED
+ctrl -> EmailService : SendEmail(message, patientEmail)
+deactivate ctrl
+activate EmailService
+
+
+
+EmailService --> ctrl
+deactivate EmailService
+
+
+activate ctrl
+end
+
+
+
+ctrl -> logSvc : logPatient(patientDto)
+deactivate ctrl
+activate logSvc
+ref over logSvc
+See Generic SD-Logging-Flow
+end ref
+logSvc --> ctrl
+deactivate logSvc
+activate ctrl
+
+ctrl --> route : Ok(patientDto)
+deactivate ctrl
+
+activate route
+<-- route : Ok(operationDto)
+deactivate route
+@enduml

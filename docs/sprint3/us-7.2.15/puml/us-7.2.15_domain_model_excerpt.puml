@@ -1,0 +1,17 @@
+@startuml US-7.2.15_Domain_Model
+
+title US 7.2.15 Relevant Domain Model
+
+Package SpecializationAggregate{
+	Entity Specialization <<(R,#0099FF) Root Entity>>{}
+
+	Class SpecializationCode <<(V,#f09800) Unique Identifier>> {}
+	Class SpecializationName <<(V,#f04800) Value Object>> {}
+	Class SpecializationDescription <<(V,#f04800) Value Object>> {}
+
+	SpecializationCode "1" --* "1" Specialization : identifies
+	SpecializationName "1" --* "1" Specialization
+	SpecializationDescription "1" --* "1" Specialization
+}
+
+@enduml

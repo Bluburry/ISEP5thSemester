@@ -1,0 +1,47 @@
+@startuml
+
+participant GenericComponent as comp
+participant GenericComponentService as svc
+participant Backend as back
+
+
+
+activate comp
+
+
+comp -> svc : validate(authToken)
+deactivate comp
+activate svc
+
+
+
+
+svc -> back : ValidateRole(authToken)
+note right back
+Backend logic will verify
+the validity and return
+the user permissions
+
+Again Backend logic stands
+irrelevant architecturally
+end note
+deactivate svc
+activate back
+
+back --> svc : Ok(responseDto)
+deactivate back
+
+activate svc
+svc --> comp : dto
+deactivate svc
+activate comp
+alt IF validation unsuccessful
+<-- comp : UI is routed to appropriate page
+end if
+
+
+
+
+
+
+@enduml

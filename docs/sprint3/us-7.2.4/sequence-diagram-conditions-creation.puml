@@ -1,0 +1,48 @@
+@startuml
+
+participant Routing
+participant MedicalConditionController as ctrl
+participant MedicalConditionService as svc
+participant MedicalCondition as fac
+participant MedicalConditionDto as dto
+participant MedicalConditionRepository as repo
+
+-> Routing : POST(medicalConditionInput)
+activate Routing
+    Routing -> ctrl : createCondition(medicalConditionInput)
+deactivate Routing
+
+activate ctrl
+    ctrl -> svc : createCondition(medicalConditionInput)
+deactivate ctrl
+
+activate svc
+    svc -> fac : create(code, \ndesignation, description, symptoms)
+deactivate svc
+
+activate fac
+    fac --> svc : medicalCondition
+deactivate fac
+
+activate svc
+    svc -> repo : save(medicalCondition)
+deactivate svc
+
+activate repo
+    repo --> svc : medicalCondition
+deactivate repo
+
+activate svc
+    svc ->  dto** : medicalCondition.toDto()
+    svc --> ctrl : medicalConditionDto
+deactivate svc
+
+activate ctrl
+    ctrl --> Routing : operationResultMessage
+deactivate ctrl
+
+activate Routing
+    <--- Routing : operationResultMessage
+deactivate Routing
+
+@enduml

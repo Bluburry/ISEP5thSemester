@@ -1,0 +1,95 @@
+@startuml
+
+participant Routing as route
+participant StaffController as ctrl
+participant StaffDTO
+participant StaffService as staffSvc
+participant StaffRepository as staffRepo
+participant UserRepository as userRepo
+participant StaffBuilder as builder
+participant SpecializationRepository as specRepo
+participant DoctorRepository as doctorRepo
+
+-> route : PUT(staffDTO, auth)
+activate route
+route -> ctrl : CreateStaff(staffDTO, auth)
+deactivate route
+activate ctrl
+
+ctrl -> StaffDTO** : create()
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> staffSvc : RegisterStaff(staffDTO)
+deactivate ctrl
+activate staffSvc
+
+staffSvc -> userRepo : GetByIdAsync(email)
+deactivate staffSvc
+activate userRepo
+
+userRepo --> staffSvc : user
+deactivate userRepo
+activate staffSvc
+
+staffSvc -> builder** : create()
+staffSvc -> builder : updateStaffWithData(staffDTO)
+deactivate staffSvc
+activate builder
+
+builder --> staffSvc : staff
+deactivate builder
+activate staffSvc
+
+staffSvc -> staffRepo : GetStaffByContact(staffContactInformation)
+deactivate staffSvc
+activate staffRepo
+
+staffRepo --> staffSvc : staffDTO
+deactivate staffRepo
+activate staffSvc
+
+alt contact information isn't used
+	staffSvc -> specRepo : GetByIdAsync(staffSpecialization)
+	deactivate staffSvc
+	activate specRepo
+
+	specRepo --> staffSvc : staffDTO
+	deactivate specRepo
+	activate staffSvc
+
+	alt specialization exists
+		staffSvc -> staffRepo : AddAsync(staff)
+		deactivate staffSvc
+		activate staffRepo
+
+		staffRepo --> staffSvc : staffDTO
+		deactivate staffRepo
+		activate staffSvc
+	end
+
+	alt specialization is doctor
+		staffSvc -> doctorRepo : AddAsync(staff)
+		deactivate staffSvc
+		activate doctorRepo
+
+		doctorRepo --> staffSvc : staffDTO
+		deactivate doctorRepo
+		activate staffSvc
+	end 
+end 
+
+staffSvc --> ctrl : staffDTO
+deactivate staffSvc
+activate ctrl
+
+ctrl --> route : staffDTO 
+deactivate ctrl
+activate route 
+
+<-- route : staffDTO
+deactivate route
+
+@enduml

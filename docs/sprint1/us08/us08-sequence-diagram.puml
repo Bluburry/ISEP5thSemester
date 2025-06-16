@@ -1,0 +1,38 @@
+@startuml
+
+participant Routing 
+participant PatientController
+participant PatientService
+participant PatientBuilder 
+participant PatientRepository 
+
+-> Routing : POST(patientDataInput)
+activate Routing
+Routing -> PatientController : createPatientProfile(token,\npatientRegistrationDto)
+deactivate Routing
+activate PatientController
+    PatientController -> PatientService : registerPatient(patientData)
+    deactivate PatientController
+    activate PatientService
+        PatientService -> PatientBuilder : getPatient(firstName, lastName, fullName,\ndateOfBirth, gender, email, phone, emergContact)
+    deactivate PatientService
+    activate PatientBuilder
+        PatientBuilder -> PatientService : patient
+    deactivate PatientBuilder
+    activate PatientService
+        PatientService -> PatientRepository : addAsync(patient)
+    deactivate PatientService
+    activate PatientRepository
+        PatientRepository --> PatientService : patientDto
+    deactivate PatientRepository
+    activate PatientService
+        PatientService --> PatientController : opperationSucess
+    deactivate PatientService
+activate PatientController
+    Routing <-- PatientController : opperationResultMessage
+deactivate PatientController
+activate Routing
+<-- Routing : opperationResultMessage
+deactivate Routing
+
+@enduml

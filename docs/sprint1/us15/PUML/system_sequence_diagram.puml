@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor Admin
+Participant System
+
+activate Admin
+
+Admin -> System : requests to list staff
+deactivate Admin
+activate System
+
+System --> Admin : displays staff roster
+deactivate System
+activate Admin
+
+@enduml

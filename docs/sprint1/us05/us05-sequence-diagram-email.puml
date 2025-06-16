@@ -1,0 +1,57 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant Routing as route
+participant PatientController as ctrl
+participant PatientService as svc
+participant PatientDto
+participant PatientRepository as patRepo
+participant LoggingService as logSvc
+
+-> route : POST(editPatientInfoDto)
+
+activate route
+    route -> ctrl : confirmPatientDeletion(token)
+deactivate route
+
+activate ctrl
+    note right ctrl
+    **Token Authentication Process** to 
+    validate the user permissions 
+    end note
+    ctrl -> svc : GetByUserIdAsync(tokenDto.UserId)
+deactivate ctrl
+
+activate svc
+    svc -> patRepo : GetByUserIdAsync(id)
+deactivate svc
+
+activate patRepo
+    patRepo --> svc: patient
+deactivate patRepo
+
+activate svc
+    svc --> PatientDto** : create()
+    svc --> ctrl : patientDto
+deactivate svc
+
+activate ctrl
+    ctrl -> logSvc : logPatientDeletion(patientDto)
+deactivate ctrl
+
+activate logSvc
+    ref over logSvc
+        See Generic SD-Logging-Flow
+    end ref
+    logSvc --> ctrl :
+deactivate logSvc
+
+activate ctrl
+    ctrl --> route : opperationSuccess
+deactivate ctrl
+
+activate route
+<-- route : opperationSuccess
+deactivate route
+@enduml

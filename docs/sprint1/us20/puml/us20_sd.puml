@@ -1,0 +1,68 @@
+@startuml US20_SD
+
+title Sequence Diagram - US 20
+
+participant Routing as rt
+participant RegisterOperationTypeController as ctrl
+participant OperationTypeService as serv
+participant OperationTypeRepository as repo
+participant SpecializationRepository as spRepo
+participant OperationTypeBuilder as builder
+participant OperationTypeDTO as dto
+
+-> rt : POST(operationTypeDTO, authToken)
+activate rt
+
+rt -> ctrl : CreateOperationType(operationTypeDTO)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : RegisterOperationType(OperationTypeDTO)
+
+activate serv
+
+serv -> repo : GetByName(OperationTypeName)
+
+activate repo
+repo --> serv : OperationType
+deactivate repo
+
+alt no operation with that name exists
+
+loop each Specialization mentioned
+serv -> spRepo : GetByIdAsync(SpecializationName)
+
+activate spRepo
+spRepo --> serv : Specialization
+deactivate spRepo
+
+end loop
+
+serv -> builder** : create()
+
+serv -> builder : createOperationType(OperationTypeName, OperationTypeVersion, OperationTypeEstimatedDuration,\nSpecializations, SpecializationsCount, OperationPhases, PhasesDuration)
+
+activate builder
+builder --> serv : operationType
+deactivate builder
+
+serv -> repo : AddAsync(OperationType)
+
+activate repo
+repo --> serv : operationType
+deactivate repo
+
+serv -> dto** : create()
+serv --> ctrl : operationTypeDTO
+deactivate serv
+end
+ctrl --> rt : operationResult
+deactivate ctrl
+
+<-- rt : operationResult
+deactivate rt
+
+@enduml

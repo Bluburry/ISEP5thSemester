@@ -1,0 +1,84 @@
+@startuml
+
+participant Routing as route
+participant FilteredPatientListingController as ctrl
+participant PatientService as usrSvc
+participant PatientDto
+participant TokenService
+participant TokenDto as TokenDTO
+participant TokenRepository as tokenRepo
+participant PatientRepository as usrRepo
+
+
+-> route : GET(medicalRecordNumber)
+
+activate route
+
+route -> ctrl : GET (medicalRecordNumber)
+
+deactivate route
+activate ctrl
+ctrl -> TokenService : GetByIdAsync(authToken)
+deactivate ctrl
+activate TokenService
+
+TokenService -> tokenRepo : GetByIdAsync(authToken)
+deactivate TokenService
+activate tokenRepo
+
+tokenRepo --> TokenService : token
+deactivate tokenRepo
+activate TokenService
+
+TokenService -> TokenDTO** : create()
+TokenService --> ctrl : tokenDto
+deactivate TokenService
+activate ctrl
+
+alt if TOKEN DOES NOT AUTHENTICATE ADMIN
+ctrl --> route : BadRequest
+activate route
+<-- route : BadRequest
+deactivate route
+end
+
+
+
+
+
+
+ctrl -> usrSvc : getPatientByIdAsync(medicalRecordNumber)
+
+deactivate ctrl
+activate usrSvc
+
+usrSvc -> usrRepo : getByIdAsync(medicalRecordNumber)
+
+deactivate usrSvc
+activate usrRepo
+
+usrRepo --> usrSvc : Patients
+
+deactivate usrRepo
+activate usrSvc
+
+
+usrSvc -> PatientDto** : create()
+
+usrSvc --> ctrl : PatientDto
+
+deactivate usrSvc
+
+activate ctrl
+
+ctrl -> route : PatientDto
+
+deactivate ctrl
+
+activate route
+
+<-- route : PatientDto
+
+deactivate route
+
+@enduml

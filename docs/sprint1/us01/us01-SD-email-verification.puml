@@ -1,0 +1,78 @@
+@startuml
+
+participant Routing as route
+participant PasswordActivationController as ctrl
+participant PasswordActivationService as passSvc
+participant UserDto as dto
+participant UserFactory as fac
+participant TokenService as tokenSvc
+participant TokenRepository as tokenRepo
+
+
+-> route : POST(password, token)
+
+activate route
+route -> ctrl : activatePassword(password, token)
+
+deactivate route
+activate ctrl
+
+ctrl -> passSvc : activatePassword(password, token)
+deactivate ctrl
+activate passSvc
+
+passSvc -> tokenSvc : GetById(tokenId)
+deactivate passSvc
+
+
+
+activate tokenSvc
+tokenSvc --> passSvc : token
+
+deactivate tokenSvc
+
+deactivate ctrl
+activate passSvc
+
+passSvc -> UserRepository : GetByIdAsync(userId)
+deactivate
+activate UserRepository
+
+UserRepository --> passSvc : user
+deactivate
+
+deactivate ctrl
+activate passSvc
+
+passSvc -> fac** : create()
+passSvc -> fac : ActivateUserPassword(user, password)
+deactivate passSvc
+activate fac
+
+fac --> passSvc : user
+deactivate fac
+activate passSvc
+
+passSvc -> UserRepository : Update(user)
+deactivate
+activate UserRepository
+
+UserRepository --> passSvc : user
+deactivate
+
+activate passSvc
+
+passSvc -> dto**: user.toDto()
+
+passSvc --> ctrl : userDto
+deactivate passSvc
+
+activate ctrl
+ctrl -> route : userDto
+deactivate
+activate route
+
+<-- route : userDto
+deactivate
+
+@enduml

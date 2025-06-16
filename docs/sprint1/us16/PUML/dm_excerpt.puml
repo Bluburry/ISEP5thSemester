@@ -1,0 +1,93 @@
+@startuml dm_excerpt
+
+title US16 Relevant Domain Model
+
+Package PatientAggregate {
+	Entity Patient <<(R,#0099FF) Root Entity>>{}
+
+	Class Gender <<(V,#f04800) Value Object>> {}
+	Class MedicalRecordNumber <<(V,#f09800) Unique Identifier>> {}
+	Class DateOfBirth <<(V,#f04800) Value Object>> {}
+	Class MedicalConditions <<(V,#f04800) Value Object>> {}
+	Class EmergencyContact <<(V,#f04800) Value Object>> {}
+	Class EmailAddress <<(V,#f04800) Value Object>> {}
+	Class PhoneNumber <<(V,#f04800) Value Object>> {}
+
+	Entity ContactInformation <<Entity>> {}
+
+	Class FirstName <<(V,#f04800) Value Object>> {}
+	Class LastName <<(V,#f04800) Value Object>> {}
+	Class FullName <<(V,#f04800) Value Object>> {}
+
+	ContactInformation "1" *--- "1" EmailAddress
+	ContactInformation "1" *--- "1" PhoneNumber
+
+	FirstName "1" -up-* "1" Patient
+	LastName "1" -up-* "1" Patient
+	FullName "1" -up-* "1" Patient
+	ContactInformation "1" -up-* "1" Patient
+	Gender "1" --* "1" Patient
+	MedicalRecordNumber "1" --* "1" Patient
+	DateOfBirth "1" --* "1" Patient
+	MedicalConditions "*" --* "1" Patient
+	EmergencyContact "1" --* "1" Patient
+}
+
+Package DoctorAggregate{
+	Entity Doctor <<(R,#0099FF) Root Entity>>{}
+	Class DoctorID <<(V,#f09800) Unique Identifier>> {}
+
+	DoctorID "1" --* "1" Doctor : identifies
+}
+
+Package OperationTypeAggregate {
+	Entity OperationType <<(R,#0099FF) Root Entity>>{}
+
+	Class OperationTypeID <<(V,#f09800) Unique Identifier>> {}
+	Class OperationTypeName <<(V,#f04800) Value Object>> {}
+	Class EstimatedDuration <<(V,#f04800) Value Object>> {}
+	Class OperationTypeVersion <<(V,#f04800) Value Object>> {}
+	Class OperationTypeStartDate <<(V,#f04800) Value Object>> {}
+	Class OperationTypeEndDate <<(V,#f04800) Value Object>> {}
+	Class ActivationStatus <<(V,#f04800) Value Object>> {}
+
+	Entity RequiredSpecialist <<Entity>> {}
+	Class SpecialistCount <<(V,#f04800) Value Object>> {}
+
+	Entity OperationPhase <<Entity>> {}
+	Class PhaseName <<(V,#f04800) Value Object>> {}
+	Class PhaseDuration <<(V,#f04800) Value Object>> {}
+
+	ActivationStatus "1" --* "1" OperationType
+}
+
+OperationTypeID "1" --* "1"  OperationType
+OperationTypeName "1" -up-* "1" OperationType
+EstimatedDuration "1" -up-* "1" OperationType
+OperationTypeVersion "1" -up-* "1" OperationType
+OperationTypeStartDate "1" -left-* "1" OperationType
+OperationTypeEndDate "1" -right-* "1" OperationType
+RequiredSpecialist "*" --* "1" OperationType
+SpecialistCount "1" -- "1" RequiredSpecialist
+OperationPhase "*" --* "1" OperationType
+OperationPhase "*" -up- "1" PhaseName
+OperationPhase "*" -up- "1" PhaseDuration
+
+
+Package OperationRequestAggregate {
+	Entity OperationRequest <<(R,#0099FF) Root Entity>>{}
+
+	Class OperationRequestID <<(V,#f09800) Unique Identifier>> {}
+	Class OperationDeadline <<(V,#f04800) Value Object>> {}
+	Enum OperationPriority <<(V,#f04800) Value Object>> {}
+}
+
+OperationRequestID "1" --* "1" OperationRequest
+OperationDeadline "1" --* "1" OperationRequest
+OperationPriority "1" -up-* "1" OperationRequest
+
+Doctor "1" -----> "*" OperationRequest : creates
+OperationRequest "*" ---left---> "*" Patient : pertains to
+OperationRequest "*" -----> "1" OperationType : contains
+
+@enduml

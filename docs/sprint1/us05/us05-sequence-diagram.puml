@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant Routing as route
+participant PatientController as ctrl
+participant TokenService as svc
+participant EmailService as emailSvc
+
+-> route : POST(editPatientInfoDto)
+
+activate route
+    route -> ctrl : DeleteSelfPatientProfile(authToken)
+deactivate route
+
+activate ctrl
+    note right ctrl
+    **Token Authentication Process** to 
+    validate the user permissions 
+    end note
+    ctrl -> svc : generateDeletionConfirmationToken()
+deactivate ctrl
+
+activate svc
+    svc --> ctrl : confirmationToken
+deactivate svc
+
+activate ctrl
+    ctrl -> emailSvc : sendDeletionConfirmation(emailAddress,\ntokenDTO)
+deactivate ctrl
+
+activate emailSvc
+    emailSvc --> ctrl : opResult
+deactivate emailSvc
+
+note left
+Ends process to wait 
+for e-mail confirmation
+end note
+
+activate ctrl
+    ctrl --> route : opResult
+deactivate ctrl
+
+activate route
+<-- route : opResult
+deactivate route
+@enduml

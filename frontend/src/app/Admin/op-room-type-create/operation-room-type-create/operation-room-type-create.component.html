@@ -1,0 +1,125 @@
+<div class="header">
+  <a href="/adminPanel">
+    <img src="../../../assets/ADMIN-PANEL.png" alt="Logo">
+  </a>
+</div>
+
+<div class="center-container">
+  <div class="editable-box">
+    <!-- Display operation room type details here that are editable -->
+    <form #operationRoomTypeForm="ngForm" (ngSubmit)="createOperationRoomType(operationRoomTypeForm)">
+      <div class="input-box">
+        <label for="input1">Room Type ID Code:</label>
+        <input type="text" name="code" ngModel id="input1" required />
+      </div>
+      <div class="input-box">
+        <label for="input2">Room Type Name:</label>
+        <input type="text" name="name" ngModel id="input2" required />
+      </div>
+      <div class="input-box">
+        <label for="input3">Description (Optional):</label>
+        <input type="text" name="description" ngModel id="input3" />
+      </div>
+
+      <div class="buttons">
+        <button type="submit" [disabled]="operationRoomTypeForm.invalid">CREATE ROOM TYPE</button>
+      </div>
+    </form>
+  </div>
+  <!-- Success and Error Messages -->
+  <div class="feedback">
+    <p *ngIf="correct" class="success-message">Room type created successfully.</p>
+    <p *ngIf="wrong" class="wrong-message">{{ errorMessage }}</p>
+  </div>
+</div>
+
+<style>
+  /* General Layout */
+  .header {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+			background-color: #d9534f; /* Red background */
+			color: white;
+			border-bottom: 3px solid #c9302c; /* Darker red for the border */
+		}
+
+  .header img {
+    max-height: 100px; /* Adjust the height to make the logo smaller */
+  }
+
+  .center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 400px;
+  }
+
+  .editable-box {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+
+  .input-box {
+    margin-bottom: 15px;
+  }
+
+  .input-box label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .input-box input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .buttons button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .buttons button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .buttons button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+
+  /* Feedback Messages */
+  .feedback {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .success-message {
+    color: green;
+    font-weight: bold;
+  }
+
+  .wrong-message {
+    color: red;
+    font-weight: bold;
+  }
+</style>

@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant Routing as route
+participant GenericCtrl as ctrl
+
+
+-> route : HTTP()
+
+activate route
+route -> ctrl : EditPatientProfile(editPatientInfoDto)
+
+
+deactivate route
+activate ctrl
+
+
+ctrl -> TokenService : GetByIdAsync(authToken)
+deactivate ctrl
+activate TokenService
+
+TokenService -> tokenRepo : GetByIdAsync(authToken)
+deactivate TokenService
+activate tokenRepo
+
+tokenRepo --> TokenService : token
+deactivate tokenRepo
+activate TokenService
+
+TokenService -> TokenDTO** : create()
+TokenService --> ctrl : tokenDto
+deactivate TokenService
+activate ctrl
+
+alt if TOKEN DOES NOT AUTHENTICATE ADMIN
+ctrl --> route : BadRequest
+activate route
+<-- route : BadRequest
+deactivate route
+end
+
+
+
+@enduml

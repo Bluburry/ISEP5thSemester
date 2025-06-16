@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor Doctor
+Participant System
+
+activate Doctor
+
+Doctor -> System : requests to create an operation request
+deactivate Doctor
+activate System
+
+System --> Doctor : asks for patient, operation type, priority and deadline
+deactivate System
+activate Doctor
+
+Doctor -> System : gives the information
+deactivate Doctor
+activate System
+
+System --> Doctor : success information message.
+deactivate System
+activate Doctor
+@enduml

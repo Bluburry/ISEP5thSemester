@@ -1,0 +1,70 @@
+@startuml
+
+Actor Admin as act
+Participant System as sys
+
+activate act
+
+act -> sys : requests to view list of patients
+deactivate act
+activate sys
+
+
+
+
+sys --> act : requests filter options
+deactivate sys
+activate act
+
+act -> sys : inputs filter options
+deactivate act
+activate sys
+
+loop for each filter
+sys --> act : requests filter relevant information
+deactivate sys
+activate act
+
+act -> sys : inputs filter information
+deactivate act
+activate sys
+end loop
+
+sys --> act : shows filtered list of patients
+
+deactivate sys
+activate act
+
+
+
+alt if selects a patient profile
+act -> sys : selects patient profile
+deactivate act
+activate sys
+
+sys --> act : displays data and requests operation to perform
+deactivate sys
+activate act
+
+alt if selects an operation is selected
+act -> sys : selects operation
+deactivate act
+activate sys
+
+ref over sys
+See US09/US10 for
+following chain of events
+end ref
+sys --> act : displays data and requests operation to perform
+
+
+deactivate sys
+activate act
+
+end alt
+
+end alt
+
+
+
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+
+Actor User as act 
+Participant System as sys
+
+activate act
+
+act -> sys : requests password change
+deactivate act
+activate sys
+
+sys --> act : requests email
+
+deactivate sys
+activate act
+
+act -> sys : inputs requested information
+deactivate act
+activate sys
+
+sys --> act : sends email
+deactivate sys
+activate act
+
+
+act -> sys : sends new password
+deactivate act
+activate sys
+
+loop while password does not meet requirements
+
+sys --> act : requests new password
+deactivate sys
+activate act
+
+act -> sys : sends new password
+deactivate act
+activate sys
+end loop
+
+sys --> act : success email
+deactivate sys
+activate act
+
+
+
+
+@enduml

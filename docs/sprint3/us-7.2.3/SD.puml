@@ -1,0 +1,47 @@
+@startuml
+
+actor ADMIN as admin
+participant AllergyController as ctrl
+participant AllergyService as svc
+participant AllergyFactory as fac
+participant AllergyDto as dto
+participant AllergyRepository as repo
+
+
+activate admin
+
+admin -> ctrl : requests to view allergies
+deactivate admin
+activate ctrl
+
+
+
+
+
+ctrl -> svc : get(queryData)
+
+deactivate ctrl
+activate svc
+
+
+
+
+svc -> repo : getFiltered(queryData)
+deactivate svc
+activate repo
+repo --> svc : allergies
+deactivate repo
+
+activate svc
+ALT LOOP FOR EACH ALLERGY
+svc ->  dto** : toDto(allergy)
+END ALT
+svc --> ctrl : allergyDtos
+deactivate svc
+activate ctrl
+
+ctrl --> admin : displays allergies
+deactivate ctrl
+activate admin
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor Admin
+Participant System
+
+activate Admin
+
+Admin -> System : requests user creation
+deactivate Admin
+activate System
+
+System --> Admin : requests information
+deactivate System
+activate Admin
+
+Admin -> System : inputs requested information
+deactivate Admin
+activate System
+
+System -> Admin : requests staff specialization
+deactivate System
+activate Admin
+
+Admin --> System : chooses specialization
+deactivate Admin
+activate System
+
+System --> Admin : success information message
+deactivate System
+activate Admin
+
+@enduml

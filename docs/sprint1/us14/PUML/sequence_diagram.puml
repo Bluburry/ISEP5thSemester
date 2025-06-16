@@ -1,0 +1,50 @@
+@startuml
+
+participant Routing as route
+participant StaffController as ctrl
+participant StaffService as staffSvc
+participant Staff
+participant StaffRepository as staffRepo
+
+-> route : Delete(license, auth)
+activate route
+route -> ctrl : DisableStaff(license, auth)
+deactivate route
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> staffSvc : DisableStaff(license)
+deactivate ctrl
+activate staffSvc
+
+staffSvc -> staffRepo : GetStaffByLicense(license)
+deactivate staffSvc
+activate staffRepo
+
+staffRepo --> staffSvc : staff
+deactivate staffRepo
+activate staffSvc
+
+staffSvc -> Staff** : DeactivateStatus()
+deactivate staffSvc
+activate Staff
+
+Staff --> staffSvc : 
+deactivate Staff
+activate staffSvc
+
+staffSvc --> ctrl : staffDTO
+deactivate staffSvc
+activate ctrl
+
+ctrl --> route : staffDTO 
+deactivate ctrl
+activate route 
+
+<-- route : staffDTO
+deactivate route
+
+@enduml

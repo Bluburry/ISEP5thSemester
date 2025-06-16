@@ -1,0 +1,25 @@
+@startuml US22_SSD
+
+title System Sequence Diagram - US 22
+
+autonumber
+
+actor "Admin" as adm
+participant "System" as app
+
+activate adm
+
+	adm -> app : deactivate operation type
+	activate app
+		app --> adm : request operation name
+	deactivate app
+
+	adm -> app : inputs requested info
+	activate app
+		app --> adm : confirms operation type deactivation
+	deactivate app
+
+deactivate adm
+
+
+@enduml

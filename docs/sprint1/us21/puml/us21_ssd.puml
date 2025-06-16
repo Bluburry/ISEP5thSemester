@@ -1,0 +1,25 @@
+@startuml US21_SSD
+
+title System Sequence Diagram - US 21
+
+autonumber
+
+actor "Admin" as adm
+participant "System" as app
+
+activate adm
+
+	adm -> app : edit operation type
+	activate app
+		app --> adm : request operation name and new info
+	deactivate app
+
+	adm -> app : inputs requested info
+	activate app
+		app --> adm : confirms operation type edit
+	deactivate app
+
+deactivate adm
+
+
+@enduml

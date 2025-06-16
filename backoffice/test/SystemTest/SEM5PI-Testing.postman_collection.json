@@ -1,0 +1,703 @@
+{
+	"info": {
+		"_postman_id": "0f9d5de9-4feb-433a-9390-6550a1689e39",
+		"name": "SEM5PI-Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39098142"
+	},
+	"item": [
+		{
+			"name": "US01 - Registration",
+			"item": [
+				{
+					"name": "RegisterTimmyAsStaff",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "tokenNumber",
+								"value": "{{ADMIN_AUTH_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:5001/api/RegisterBackoffice/RegisterBackoffice?emailAddress=timmykentley@nope.com",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"RegisterBackoffice",
+								"RegisterBackoffice"
+							],
+							"query": [
+								{
+									"key": "emailAddress",
+									"value": "timmykentley@nope.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActivatePassword",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "9a496651-8120-45ba-a0f6-fe8d1b6ce70a",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"!Timmypass12\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/PasswordActivation",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"PasswordActivation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US02 - ResetPassword",
+			"item": [
+				{
+					"name": "RequestPasswordChange",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/ResetPassword/RequestPasswordChange?email=timmykentley@nope.com",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"ResetPassword",
+								"RequestPasswordChange"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "timmykentley@nope.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PasswordChange",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Assuming your body is a raw string\r",
+									"let requestBody = pm.request.body.raw;\r",
+									"pm.globals.set(\"PASSWORD_TIMMY\", requestBody);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "49c92d87-d1e5-4114-9edc-7f074693a086",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"!CoolPassword10\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/ResetPassword/ChangePassword",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"ResetPassword",
+								"ChangePassword"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US03 - RegisterPatient",
+			"item": [
+				{
+					"name": "RegisterUserPatient",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"'jogosdorico@nope.com\",\r\n    \"password\": \"!Password21\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Users/RegisterUserPatient",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Users",
+								"RegisterUserPatient"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US04 - Update Patient",
+			"item": [
+				{
+					"name": "editPatient_Patient",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Segio\",\r\n  \"lastName\": \"Andade\",\r\n  \"fullName\": \"\",\r\n  \"medicalHistory\": {},\r\n  \"gender\": \"FEMALE\",\r\n  \"dateOfBirth\": \"1999-10-02\",\r\n  \"email\": \"TESTE@nope.com\",\r\n  \"phone\": \"911222333\",\r\n  \"emergencyContact\": \"933444555\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Patient/editPatient_Patient",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Patient",
+								"editPatient_Patient"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US05 - Delete Myself",
+			"item": [
+				{
+					"name": "DeleteSelfPatient",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Patient/DeleteSelfPatient",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Patient",
+								"DeleteSelfPatient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConfirmPatientDeletion",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Patient/ConfirmPatientDeletion",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Patient",
+								"ConfirmPatientDeletion"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US06 - Login as Backoffice User",
+			"item": [
+				{
+					"name": "LoginTimmy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the request body as JSON\r",
+									"let requestBody = pm.request.body.raw;\r",
+									"let jsonData = JSON.parse(requestBody);\r",
+									"\r",
+									"// Set the global variable with the password value\r",
+									"pm.globals.set(\"PASSWORD_TIMMY\", jsonData.password);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"timmykentley@nope.com\",\r\n  \"password\": \"!CoolPassword10\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Login/Login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Login",
+								"Login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US07 - IAM Login",
+			"item": [
+				{
+					"name": "US07 - Login IAM",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Login/LoginIAM",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Login",
+								"LoginIAM"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "US07 - IAM REGISTER RESPONSE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Users/RegisterIAMResponse",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Users",
+								"RegisterIAMResponse"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US08 - Create Patient",
+			"item": [
+				{
+					"name": "CreatePatient",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Sergio\",\r\n  \"lastName\": \"Andade\",\r\n  \"fullName\": \"Sergio Andade\",\r\n  \"gender\": \"MALE\",\r\n  \"dateOfBirth\": \"1999-10-02\",\r\n  \"email\": \"TESTE@nope.com\",\r\n  \"phone\": \"911222333\",\r\n  \"emergencyContact\": \"933444555\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Patient/CreatePatient",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Patient",
+								"CreatePatient"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Us09 - Edit Patient",
+			"item": [
+				{
+					"name": "EditPatient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{ADMIN_AUTH_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"patientId\": \"MRN12345\",\r\n  \"firstName\": \"\",\r\n  \"lastName\": \"\",\r\n  \"fullname\": \"\",\r\n  \"email\": \"\",\r\n  \"phone\": \"\",\r\n  \"medicalHistory\": \"\",\r\n  \"dateOfBirth\": \"1976-02-12\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Patient/editPatient",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Patient",
+								"editPatient"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US10 - Delete Patient",
+			"item": [
+				{
+					"name": "DeletePatient",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{ADMIN_AUTH_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"MRN12345\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Patient/DeletePatient",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Patient",
+								"DeletePatient"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "US11 - List Patient",
+			"item": [
+				{
+					"name": "FilteredPatientList",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{ADMIN_AUTH_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/FilteredPatientList/filteredPatients?dateOfBirth=2001-04-12",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"FilteredPatientList",
+								"filteredPatients"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "John",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "a",
+									"disabled": true
+								},
+								{
+									"key": "phoneNumber",
+									"value": "a",
+									"disabled": true
+								},
+								{
+									"key": "medicalRecordNumber",
+									"value": "a",
+									"disabled": true
+								},
+								{
+									"key": "dateOfBirth",
+									"value": "2001-04-12"
+								},
+								{
+									"key": "gender",
+									"value": "MALE",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LoginAsAdmin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body as JSON\r",
+							"let responseBody = pm.response.json();\r",
+							"\r",
+							"// Check if the Token exists in the response\r",
+							"if (responseBody.Token) {\r",
+							"    // Set the global variable\r",
+							"    pm.globals.set(\"ADMIN_AUTH_TOKEN\", responseBody.Token);\r",
+							"    console.log(\"Global variable 'ADMIN_AUTH_TOKEN' set to:\", responseBody.Token);\r",
+							"} else {\r",
+							"    console.error(\"Token not found in response:\", responseBody);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"admin@hospital.com\",\r\n  \"password\": \"!AdminPassword1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/Login/Login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"Login",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "PASSWORD_RESET_TOKEN",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,25 @@
+@startuml
+
+actor ADMIN as admin
+actor System as sys
+
+
+activate admin
+
+admin -> sys : request creation of allergy
+deactivate admin
+activate sys
+
+sys --> admin : requests allergy information
+deactivate sys
+activate admin
+
+admin -> sys : input allergy information
+deactivate admin
+activate sys
+
+sys --> admin : operation result message
+deactivate sys
+activate admin
+
+@enduml

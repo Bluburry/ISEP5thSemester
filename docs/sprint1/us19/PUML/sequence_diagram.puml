@@ -1,0 +1,72 @@
+@startuml
+
+participant Routing as route
+participant OperationRequestController as ctrl
+participant OperationRequestService as docSvc
+participant QueryDataDto as dto
+participant OperationRequestBuilder as builder
+participant StaffRepository as staffRepo
+participant DoctorRepository as docRepo
+participant PatientRepository as patRepo
+participant OperationTypeRepository as opRepo
+participant OperationRequestRepository as reqRepo
+
+-> route : GET(patientName, operationType, priority, status, auth)
+activate route
+
+route -> ctrl : ListOperationRequest(patientName, operationType, priority, status, auth)
+deactivate route
+activate ctrl
+
+REF OVER ctrl
+	Refer to generic auth SD
+end ref
+
+ctrl -> docSvc : ListOperationRequest(patientName, operationType, priority, status, token)
+deactivate ctrl
+activate docSvc
+
+docSvc -> staffRepo : GetStaffByUser(user)
+deactivate docSvc  
+activate staffRepo
+
+staffRepo --> docSvc : staff
+deactivate staffRepo
+activate docSvc
+
+docSvc -> docRepo : GetDoctorByLicenseNumber(staff)
+deactivate docSvc
+activate docRepo
+
+docRepo --> docSvc : doctor
+deactivate docRepo
+activate docSvc
+
+docSvc -> dto** : create(patientName, operationType, priority, status)
+deactivate docSvc
+activate dto
+
+dto --> docSvc : queryDto
+deactivate dto
+activate docSvc
+
+docSvc -> reqRepo : GetRequestByDoctor(doctorID, queryDto)
+activate reqRepo
+deactivate docSvc
+
+reqRepo --> docSvc : operationRequestList
+deactivate reqRepo
+activate docSvc
+
+docSvc --> ctrl : operationRequestListDTO
+deactivate docSvc
+activate ctrl
+
+ctrl --> route : operationRequestListDTO
+deactivate ctrl
+activate route
+
+<-- route : operationRequestListDTO
+deactivate route 
+
+@enduml

@@ -1,0 +1,111 @@
+@startuml
+
+Package UserAggregate {
+	Entity User <<(V,#0000FF) Root Entity>>{}
+
+
+}
+
+
+Package StaffAggregate {
+	Entity Staff <<(V,#0000FF) Root Entity>>{}
+
+
+	Entity ContactInformation <<Entity>> {}
+
+
+
+
+
+
+	ContactInformation "1" --* "1" Staff
+
+}
+
+Package SpecializationAggregate{
+	Entity Specialization <<(V,#0000FF) Root Entity>>{}
+
+
+}
+
+Specialization "1" <-- "1" Staff : has a
+
+
+Package PatientAggregate {
+	Entity Patient <<(V,#0000FF) Root Entity>>{}
+
+
+
+
+	Entity ContactInformation <<Entity>> {}
+
+
+
+
+	ContactInformation "1" -up-* "1" Patient
+
+
+}
+
+
+
+
+
+
+Package OperationRequestAggregate {
+	Entity OperationRequest <<(V,#0000FF) Root Entity>>{}
+
+}
+
+
+OperationPriority "1" -up-* "1" OperationRequest
+
+Package OperationTypeAggregate {
+	Entity OperationType <<(V,#0000FF) Root Entity>>{}
+
+}
+
+
+Package SurgeryRoomAggregate {
+	Entity SurgeryRoom <<(V,#0000FF) Root Entity>>{}
+
+}
+
+
+Package AppointmentAggregate {
+	Entity Appointment <<(V,#0000FF) Root Entity>>{}
+
+}
+
+Package DoctorAggregate{
+	Entity Doctor <<(V,#0000FF) Root Entity>>{}
+
+}
+
+
+Package LogAggregate {
+	Entity Log <<(V,#0000FF) Root Entity>>{}
+}
+
+
+
+
+
+
+Staff "1" ---left--> "1" User : is a
+Patient "1" --down---> "1" User : can be a
+
+
+
+Doctor "0..1" <--- "1" Staff : may be
+Doctor "1" -----> "*" OperationRequest : creates
+OperationRequest "*" ---left---> "*" Patient : pertains to
+OperationRequest "*" -----> "1" OperationType : contains
+Specialization "*" <---- "*" OperationRequest : requests
+
+
+Appointment "1" ------> "1" OperationRequest : pertains to
+Appointment "*" ------> "*" Staff : reserves
+Appointment "*" ------> "*" SurgeryRoom : reserves a
+
+@enduml

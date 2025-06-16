@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+
+    h3 {
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .header {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+      background-color: #007bff; /* Blue background */
+			color: white;
+      border-bottom: 3px solid #0056b3; /* Darker blue for the border */
+		}
+
+    .header nav img {
+      width: 60px;
+    }
+
+    /* Layout */
+    .main-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 20px;
+    }
+
+    .left {
+      flex: 1;
+      order: 1;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .right {
+      flex: 1;
+      order: 3;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .center {
+      flex: 1.5; /* Slightly larger than left and right */
+      order: 2;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .scroll-box {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      padding: 15px;
+      background-color: #fafafa;
+      border-radius: 8px;
+    }
+
+    .data-item, .allergy-item {
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.2s;
+      cursor: pointer;
+      background-color: #ffffff;
+    }
+
+    .data-item:hover, .allergy-item:hover {
+      background-color: #f0f7ff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transform: scale(1.01);
+    }
+
+    .data-item:active, .allergy-item:active {
+      background-color: #e6f0ff;
+      transform: scale(0.99);
+    }
+
+    /* Input Fields */
+    .input-box {
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+
+    .input-box label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      justify-content: center; /* Center the button */
+    }
+
+    .buttons-header {
+      display: flex;
+      gap: 15px;
+      justify-content: center; /* Center the button */
+    }
+
+    .reset, .get, .update, .delete {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .reset {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .reset:hover {
+      background-color: #218838;
+    }
+
+    .get {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .get:hover {
+      background-color: #117a8b;
+    }
+
+    .update {
+      background-color: #ffa600;
+      color: #ffffff;
+    }
+
+    .update:hover {
+      background-color: #c88200;
+    }
+
+    .delete {
+      background-color: #ff0000;
+      color: #ffffff;
+    }
+
+    .delete:hover {
+      background-color: #c00000;
+    }
+
+    .select-content {
+      flex: 1;
+      background-color: #ffffff;
+    }
+
+    .details-box {
+      margin-bottom: 15px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      color: #333;
+    }
+
+    .details-box label {
+      font-weight: bold;
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+    }
+
+    .details-box span {
+      font-size: 1rem;
+      display: block;
+    }
+
+    .list-box {
+      padding: 0; /* Remove extra padding from the list */
+      margin: 0; /* Remove default margin from the list */
+      list-style-position: inside; /* Ensure the dots are inside the box */
+    }
+
+    .list-box li {
+      margin: 4px 0; /* Add some spacing between list items */
+      word-wrap: break-word; /* Ensure long text wraps properly */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+      }
+
+      .left, .right {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <nav>
+      <a href="/doctor-panel">
+        <img src="../../../assets/ADMIN-PANEL.png" alt="Logo" />
+      </a>
+    </nav>
+  </div>
+
+  <!--------------------- Main Content - Allergy Box --------------------->
+  <div class="main-content">
+    <div class="left">
+    <!-- Neat Scroll Box for MedicalCondition Data Display -->
+    <div class="scroll-box data-display-box">
+      <div *ngFor="let patient of patients" class="data-item" (click)="fetchPatientById(patient.mrn)">
+        <p><strong>MRN:</strong> {{ patient.mrn }}</p>
+        <p><strong>Name:</strong> {{ patient.fullName }}</p>
+        <p><strong>Date Of Birth:</strong> {{ patient.dateOfBirth }}</p>
+        <p><strong>Email:</strong> {{ patient.email }}</p>
+        <p><strong>Gender:</strong> {{ patient.gender }}</p>
+        <hr />
+      </div>
+    </div>
+
+    <div class="input-box">
+      <label for="queryId">Query by Allergy code:</label>
+      <input type="text" [(ngModel)]="queryAllergy" id="queryId" />
+    </div>
+    <div class="input-box">
+      <label for="queryDesignation">Query by Medical Condition code:</label>
+      <input type="text" [(ngModel)]="queryCondition" id="queryDesignation" />
+    </div>
+
+    <!-- Buttons -->
+    <div class="buttons">
+      <button class="get" (click)="queryPatientsByClinical()">SEARCH</button>
+      <button class="reset" (click)="resetPatient()">RESET</button>
+    </div>
+  </div> 
+  <!--------------------- Main Content - Medical Condition Box --------------------->
+    <div class="right">
+      <h3>Medical Condition Data</h3>
+      <!-- Editable MedicalCondition Box -->
+      <div class="select-content" *ngIf="selectedCondition">
+        <div class="details-box">
+          <label>Code:</label>
+          <span>{{ selectedCondition!.code }}</span>
+        </div>
+        <div class="details-box">
+          <label>Designation:</label>
+          <span>{{ selectedCondition!.designation }}</span>
+        </div>
+        <div class="details-box">
+          <label>Symptoms:</label>
+          <span>{{ selectedCondition!.symptoms }}</span>
+        </div>
+        <div class="details-box">
+          <label>Description:</label>
+          <span>{{ selectedCondition!.description }}</span>
+        </div>
+      </div>
+      <!-- Neat Scroll Box for MedicalCondition Data Display -->
+      <div class="scroll-box data-display-box">
+        <div *ngFor="let condition of selectedAppointmentConditions" class="data-item" (click)="fetchConditionById(condition.code)">
+          <p><strong>Code:</strong> {{ condition.code }}</p>
+          <p><strong>Name:</strong> {{ condition.designation }}</p>
+          <p><strong>Description:</strong> {{ condition.description }}</p>
+          <hr />
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <p style="margin-top: 15px; color: #FF5722; font-weight: bold; text-align: center;">{{ errorMessageCondition }}</p>
+    </div>
+  <!--------------------- Main Content - Patient(ClinicalDetails) Box --------------------->
+    <div class="center">
+      <h3>Allergies's Clinical Details Data</h3>
+      <!-- Editable MedicalCondition Box -->
+      <div class="select-content" *ngIf="selectedAllergy">
+        <div class="details-box">
+          <label>ID:</label>
+          <span>{{ selectedAllergy!.id }}</span>
+        </div>
+        <div class="details-box">
+          <label>Name:</label>
+          <span>{{ selectedAllergy!.name }}</span>
+        </div>
+        <div class="details-box">
+          <label>Description:</label>
+          <span>{{ selectedAllergy!.description }}</span>
+        </div>
+      </div>
+
+      <div class="scroll-box data-display-box">
+        <div *ngFor="let allergy of selectedAppointmentAllergies" class="data-item" (click)="fetchAllergyById(allergy.id)">
+          <p><strong>Code:</strong> {{ allergy.id }}</p>
+          <p><strong>Name:</strong> {{ allergy.name }}</p>
+          <p><strong>Description:</strong> {{ allergy.description }}</p>
+          <hr />
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <p style="margin-top: 15px; color: #FF5722; font-weight: bold; text-align: center;">{{ errorMessagePatient }}</p>
+    </div>
+  </div>
+</body>
+</html>

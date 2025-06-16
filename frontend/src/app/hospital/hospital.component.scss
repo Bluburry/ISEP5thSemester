@@ -1,0 +1,13 @@
+/* hospital.component.scss */
+:host {
+	display: block;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+}
+
+canvas {
+	display: block;
+	width: 100%;
+	height: 100%;
+}

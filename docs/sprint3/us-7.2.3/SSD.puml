@@ -1,0 +1,16 @@
+@startuml
+
+participant Admin as admin
+participant System as sys
+
+activate admin
+admin -> sys : requests to view allergies
+deactivate admin
+activate sys
+
+sys --> admin : displays allergies
+deactivate sys
+activate admin
+
+
+@enduml

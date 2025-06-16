@@ -1,0 +1,42 @@
+@startuml
+
+participant Routing as route
+participant StaffController as ctrl
+participant StaffService as staffSvc
+participant StaffRepository as staffRepo
+
+
+-> route : GET(auth)
+activate route
+route -> ctrl : ListAll(auth)
+deactivate route
+activate ctrl
+
+REF OVER ctrl
+	Refer to generic auth SD
+end ref
+
+ctrl -> staffSvc : GetStaffList()
+deactivate ctrl
+activate staffSvc
+
+staffSvc -> staffRepo : GetStaffList()
+deactivate staffSvc
+activate staffRepo
+
+staffRepo --> staffSvc : listStaffDTO
+deactivate staffRepo
+activate staffSvc
+
+staffSvc --> ctrl : listStaffDTO
+deactivate staffSvc
+activate ctrl
+
+ctrl --> route : listStaffDTO
+deactivate ctrl
+activate route 
+
+<-- route : listStaffDTO
+deactivate route
+
+@enduml

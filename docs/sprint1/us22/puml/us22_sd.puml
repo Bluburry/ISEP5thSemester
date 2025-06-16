@@ -1,0 +1,54 @@
+@startuml US22_SD
+
+title Sequence Diagram - US 22
+
+participant Routing as rt
+participant RegisterOperationTypeController as ctrl
+participant OperationTypeService as serv
+participant OperationTypeRepository as repo
+participant OperationType as op
+participant OperationTypeDTO as dto
+
+-> rt : POST(operationTypeName, authToken)
+activate rt
+
+rt -> ctrl : DeactivateByName(operationTypeName)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : DeactivateByName(operationTypeName)
+
+activate serv
+
+serv -> repo : GetByNameLatest(OperationTypeName)
+
+activate repo
+repo --> serv : OperationType
+deactivate repo
+
+serv -> op : DeactivateOperationType()
+
+activate op
+op --> serv :
+deactivate op
+
+serv -> repo : Update(OperationType)
+
+activate repo
+repo --> serv : operationType
+deactivate repo
+
+serv -> dto** : create()
+serv --> ctrl : operationTypeDTO
+deactivate serv
+
+ctrl --> rt : operationResult
+deactivate ctrl
+
+<-- rt : operationResult
+deactivate rt
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+
+Actor Patient as act
+Participant System as sys
+
+activate act
+    act -> sys : requests to delete their patient profile
+deactivate act
+
+activate sys
+    sys --> act : sends confirmation e-mail
+deactivate sys
+
+activate act
+    act -> sys : confirms through the e-mail
+deactivate act
+
+activate sys
+    sys --> act : shows opperation success
+deactivate sys
+
+activate act
+
+@enduml

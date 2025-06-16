@@ -1,0 +1,64 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+Package SurgeryRoomAggregate {
+	Entity SurgeryRoom <<(R,#0099FF) Root Entity>>{}
+
+	Class RoomNumber  <<(V,#f09800) Unique Identifier>> {}
+	Class RoomType <<(V,#f04800) Value Object>> {}
+	Class RoomCapacity <<(V,#f04800) Value Object>> {}
+	Class RoomStatus <<(V,#f04800) Value Object>> {}
+	Class MaintenanceSlots <<(V,#f04800) Value Object>> {}
+}
+
+RoomNumber "1" -up-* "1" SurgeryRoom
+RoomType "1" -up-* "1" SurgeryRoom
+RoomCapacity "1" -right-* "1" SurgeryRoom
+RoomStatus "1" --* "1" SurgeryRoom
+MaintenanceSlots "*" --* "1" SurgeryRoom
+
+Package AppointmentAggregate {
+	Entity Appointment <<(R,#0099FF) Root Entity>>{}
+
+	Class AppointmentID <<(V,#f09800) Unique Identifier>> {}
+	Class DateAndTime <<(V,#f04800) Value Object>> {}
+	Class AppointmentStatus <<(V,#f04800) Value Object>> {}
+	Entity AssignedStaff <<Entity>>{}
+
+	AssignedStaff "*" -- "1" Appointment 
+	DateAndTime "1" --* "1" Appointment
+}
+
+AppointmentID "1" --* "1" Appointment
+AppointmentStatus "1" --* "1" Appointment
+Appointment "*" ------> "*" SurgeryRoom : reserves a
+
+Package StaffAggregate {
+	Entity Staff <<(R,#0099FF) Root Entity>>{}
+
+	Class AvailabilitySlots <<(V,#f04800) Value Object>> {}
+	Class LicenseNumber <<(V,#f09800) Unique Identifier>> {}
+
+
+	Entity ContactInformation <<Entity>> {}
+
+	Class FirstName <<(V,#f04800) Value Object>> {}
+	Class LastName <<(V,#f04800) Value Object>> {}
+	Class FullName <<(V,#f04800) Value Object>> {}
+	Class EmailAddress <<(V,#f04800) Value Object>> {}
+	Class PhoneNumber <<(V,#f04800) Value Object>> {}
+
+	ContactInformation "1" *-- "1" EmailAddress
+	ContactInformation "1" *-- "1" PhoneNumber
+
+	FirstName "1" -up-* "1" Staff
+	LastName "1" -up-* "1" Staff
+	FullName "1" -up-* "1" Staff
+	ContactInformation "1" --* "1" Staff
+	AvailabilitySlots "*" --* "1" Staff
+	LicenseNumber "1" --* "1" Staff
+}
+
+AssignedStaff "*" --- "1" Staff : reserves
+
+@enduml

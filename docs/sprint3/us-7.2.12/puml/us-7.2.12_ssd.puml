@@ -1,0 +1,25 @@
+@startuml US-7.2.12_SSD
+
+title System Sequence Diagram - US 7.2.12
+
+autonumber
+
+actor "Admin" as adm
+participant "System" as app
+
+activate adm
+
+	adm -> app : list specializations
+	activate app
+		app --> adm : request specialization filter option
+	deactivate app
+
+	adm -> app : inputs requested info
+	activate app
+		app --> adm : lists specializations
+	deactivate app
+
+deactivate adm
+
+
+@enduml

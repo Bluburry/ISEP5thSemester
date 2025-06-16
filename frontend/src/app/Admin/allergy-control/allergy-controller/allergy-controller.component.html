@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+
+    h3 {
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background-color: #d9534f; /* Red background */
+      color: white;
+      border-bottom: 3px solid #c9302c; /* Darker red for the border */
+    }
+    /* Distinct Section Styles */
+    .create-box, .query-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px; /* Add spacing between sections */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .create-box {
+      background-color: #f9f9f9; /* Light gray background for the Create section */
+      border: 2px solid #28a745; /* Green border */
+    }
+
+    .query-box {
+      background-color: #fff; /* Keep white background for the Query section */
+      border: 2px solid #17a2b8; /* Blue border */
+    }
+    .header nav img {
+      width: 150px;
+    }
+
+    /* Layout */
+    .main-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 20px;
+    }
+
+    .left, .right {
+      flex: 1;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .scroll-box {
+      max-height: 550px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      padding: 15px;
+      background-color: #fafafa;
+      border-radius: 8px;
+    }
+
+    .data-item, .allergy-item {
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.2s;
+      cursor: pointer;
+      background-color: #ffffff;
+    }
+
+    .status-message {
+      margin: 20px auto;
+      max-width: 800px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .data-item:hover, .allergy-item:hover {
+      background-color: #f0f7ff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transform: scale(1.01);
+    }
+
+    .data-item:active, .allergy-item:active {
+      background-color: #e6f0ff;
+      transform: scale(0.99);
+    }
+
+    /* Input Fields */
+    .input-box input {
+      width: calc(100% - 20px); /* Adjust width to account for padding */
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box; /* Ensure padding is included in width calculation */
+    }
+
+    /* Fix for the overall layout of the left pane */
+    .create-box, .query-box {
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 100%; /* Ensure sections do not exceed their parent container */
+      box-sizing: border-box; /* Include padding and border in the width */
+    }
+
+    .input-box label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px; /* Increased margin for better spacing */
+    }
+
+    .create, .get, .update {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .create {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .create:hover {
+      background-color: #218838;
+    }
+
+    .get {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .get:hover {
+      background-color: #117a8b;
+    }
+
+    .update {
+      background-color: #ffc107;
+      color: #212529;
+    }
+
+    .update:hover {
+      background-color: #e0a800;
+    }
+
+    /* Messages */
+    .error-message {
+      color: #dc3545;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .success-message {
+      color: #28a745;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+      }
+
+      .left, .right {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <nav>
+      <a href="/adminPanel">
+        <img src="../../../assets/ADMIN-PANEL.png" alt="Logo" />
+      </a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="left">
+      <!-- Create Allergy Box -->
+      <div class="create-box">
+        <h3>Create Allergy</h3>
+        <div class="input-box">
+          <label for="createCode">Code (4AZ8.X format, leave empty for automatic generation):</label>
+          <input type="text" [(ngModel)]="createData.id" id="createCode" />
+        </div>
+        <div class="input-box">
+          <label for="createName">Name:</label>
+          <input type="text" [(ngModel)]="createData.name" id="createName" />
+        </div>
+        <div class="input-box">
+          <label for="createDescription">Description:</label>
+          <input type="text" [(ngModel)]="createData.description" id="createDescription" />
+        </div>
+        <!-- Create Button -->
+        <div class="buttons">
+          <button class="create" (click)="createAllergy()">CREATE</button>
+        </div>
+      </div>
+
+      <!-- Query Allergy Box -->
+      <div class="query-box">
+        <h3>Query Allergies</h3>
+        <div class="input-box">
+          <label for="queryId">Query by ID:</label>
+          <input type="text" [(ngModel)]="queryData.id" (ngModelChange)="getAllergies()" id="queryId" />
+        </div>
+        <div class="input-box">
+          <label for="queryName">Query by Name:</label>
+          <input type="text" [(ngModel)]="queryData.name" (ngModelChange)="getAllergies()" id="queryName" />
+        </div>
+        <div class="input-box">
+          <label for="queryDescription">Query by Description:</label>
+          <input type="text" [(ngModel)]="queryData.description" (ngModelChange)="getAllergies()" id="queryDescription" />
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <!-- Editable Allergy Box -->
+      <div class="editable-box" *ngIf="selectedAllergy">
+        <div class="input-box">
+          <label for="input1">ID:</label>
+          <input type="text" [(ngModel)]="selectedAllergy.id" id="input1" readonly />
+        </div>
+        <div class="input-box">
+          <label for="input2">Name:</label>
+          <input type="text" [(ngModel)]="selectedAllergy.name" id="input2" />
+        </div>
+        <div class="input-box">
+          <label for="input3">Description:</label>
+          <input type="text" [(ngModel)]="selectedAllergy.description" id="input3" />
+        </div>
+      </div>
+
+      <!-- Update Button -->
+      <div class="buttons">
+        <button class="update" (click)="selectedAllergy?.id && patchAllergies()">UPDATE</button>
+      </div>
+
+      <!-- Neat Scroll Box for Allergy Data Display -->
+      <div class="scroll-box data-display-box">
+        <h3>Allergies Data</h3>
+        <div *ngFor="let allergy of allergies" class="data-item" (click)="fetchAllergyById(allergy.id)">
+          <p><strong>ID:</strong> {{ allergy.id }}</p>
+          <p><strong>Name:</strong> {{ allergy.name }}</p>
+          <p><strong>Description:</strong> {{ allergy.description }}</p>
+          <hr />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Message -->
+  <div *ngIf="statusMessage" class="status-message">
+    {{ statusMessage }}
+  </div>
+</body>
+</html>

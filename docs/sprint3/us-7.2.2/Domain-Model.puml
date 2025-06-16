@@ -1,0 +1,15 @@
+@startuml
+
+Package AllergyAggregate {
+	Entity Allergy <<(R,#0099FF) Root Entity>> {}
+
+	Class ConditionCode <<(V,#f04800) Value Object>> {}
+	Class ConditionDesignation <<(V,#f04800) Value Object>> {}
+	Class ConditionDescription <<(V,#f04800) Value Object>> {}
+	
+	Allergy "1" *-- "1" ConditionCode
+	Allergy "1" *-- "1" ConditionDescription
+	Allergy "1" *-- "1" ConditionDesignation
+}
+
+@enduml

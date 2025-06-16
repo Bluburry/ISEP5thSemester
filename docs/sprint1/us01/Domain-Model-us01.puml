@@ -1,0 +1,55 @@
+@startuml
+
+Package UserAggregate {
+    Entity User <<(V,#0000FF) Root Entity>>{}
+
+
+}
+
+
+Package StaffAggregate {
+    Entity Staff <<(V,#0000FF) Root Entity>>{}
+
+
+    Entity ContactInformation <<Entity>> {}
+
+
+
+
+
+
+    ContactInformation "1" --* "1" Staff
+
+}
+
+Package SpecializationAggregate{
+    Entity Specialization <<(V,#0000FF) Root Entity>>{}
+
+
+}
+
+    Specialization "1" <-- "1" Staff : has a
+
+
+
+
+Package DoctorAggregate{
+   Entity Doctor <<(V,#0000FF) Root Entity>>{}
+
+}
+
+
+
+
+
+
+
+
+Staff "1" ---left--> "1" User : is a
+
+
+
+Doctor "0..1" <--- "1" Staff : may be
+
+
+@enduml

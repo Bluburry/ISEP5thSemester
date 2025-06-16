@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor Doctor
+Participant System
+
+activate Doctor
+
+Doctor -> System : requests to see patient medical records
+deactivate Doctor
+activate System
+
+System --> Doctor : displays patient medical record
+deactivate System
+activate Doctor
+
+Doctor -> System : inputs filters
+deactivate Doctor
+activate System
+
+System --> Doctor : displays filtered patient medical record
+deactivate System
+activate Doctor
+
+@enduml

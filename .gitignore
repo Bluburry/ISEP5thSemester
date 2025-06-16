@@ -1,0 +1,121 @@
+# heads up que pode ser preciso remover algum destes no futuro
+.idea/
+.vscode/
+.vs/
+bin/
+backoffice/obj/
+backoffice/bin/
+backoffice/src/.vs
+backoffice/src/.vscode
+backoffice/src/bin/
+backoffice/src/obj/
+obj/
+backoffice/src/Migrations/
+Migrations
+backoffice/test/bin/
+backoffice/test/obj/
+backoffice/src/hospitalDb*
+backoffice/test/test.sln
+node_modules/
+
+angular-three/.gitignore
+angular-three/.angular
+
+#frontend
+
+frontend/.angular
+frontend/.vscode
+frontend/node_modules
+
+
+# auto generated angular gitignore
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+angular-three/dist
+angular-three/tmp
+angular-three/out-tsc
+angular-three/bazel-out
+
+# Node
+angular-three/node_modules
+angular-three/npm-debug.log
+angular-three/yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+
+
+# See https:/docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# Compiled output
+frontend/dist
+frontend/tmp
+frontend/out-tsc
+frontend/bazel-out
+
+# Node
+frontend/node_modules
+frontend/npm-debug.log
+frontend/yarn-error.log
+
+# IDEs and editors
+frontend/.idea/
+frontend/.project
+frontend/.classpath
+frontend/.c9/
+frontend/*.launch
+frontend/.settings/
+frontend/.sublime-workspace
+
+# Visual Studio Code
+frontend/.vscode/
+frontend/!.vscode/settings.json
+frontend/!.vscode/tasks.json
+frontend/!.vscode/launch.json
+frontend/!.vscode/extensions.json
+frontend/.history/*
+
+# Miscellaneous
+frontend/.angular/cache
+frontend/.sass-cache/
+frontend/connect.lock
+frontend/coverage
+frontend/libpeerconnection.log
+frontend/testem.log
+frontend/typings
+
+# System files
+frontend/.DS_Store
+frontend/Thumbs.db
+
+
+backoffice/src/appsettings.json
+
+RSARSAcertificates/

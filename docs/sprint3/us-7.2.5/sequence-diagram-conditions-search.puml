@@ -1,0 +1,41 @@
+@startuml
+
+participant Routing
+participant MedicalConditionController as ctrl
+participant MedicalConditionService as svc
+participant MedicalConditionDto as dto
+participant MedicalConditionRepository as repo
+
+-> Routing : GET(queryData)
+activate Routing
+    Routing -> ctrl : searchCondition(queryData)
+deactivate Routing
+
+activate ctrl
+    ctrl -> svc : searchCondition(queryData)
+deactivate ctrl
+
+activate svc
+    svc -> repo : find(queryData)
+deactivate svc
+
+activate repo
+    repo --> svc : medicalConditions
+deactivate repo
+
+activate svc
+    loop for each medicalCondition that meets the criteria
+    svc ->  dto** : medicalCondition.toDto()
+    end loop
+    svc --> ctrl : medicalConditionsDto
+deactivate svc
+
+activate ctrl
+    ctrl --> Routing : operationResultMessage
+deactivate ctrl
+
+activate Routing
+    <--- Routing : operationResultMessage
+deactivate Routing
+
+@enduml

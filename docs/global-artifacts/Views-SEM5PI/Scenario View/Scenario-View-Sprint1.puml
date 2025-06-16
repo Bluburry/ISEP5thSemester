@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+left to right direction
+
+User as "BACKOFFICE USER"
+Doctor as "DOCTOR"
+Admin as "ADMIN"
+Patient as "PATIENT"
+
+User --> (Log in)
+User --> (Reset password)
+
+Patient --> (Log in)
+Patient --> (Register for healthcare application)
+Patient --> (Update own information)
+Patient --> (Delete account)
+
+Doctor --> (Request operation)
+Doctor --> (Update operation request)
+Doctor --> (Delete operation request)
+Doctor --> (List/Search operation requests)
+
+Doctor --> User
+Admin --> User
+
+Admin --> (Register backoffice user)
+Admin --> (Create new patient profile)
+Admin --> (Edit patient profile)
+Admin --> (Delete patient profile)
+Admin --> (List/Search patient profiles)
+Admin --> (Create new staff profile)
+Admin --> (Edit staff profile)
+Admin --> (Deactivate staff profile)
+Admin --> (List/Search staff profiles)
+Admin --> (Create new operation type)
+Admin --> (Edit operation type)
+Admin --> (Delete operation type)
+Admin --> (List/Search operation types)
+@enduml

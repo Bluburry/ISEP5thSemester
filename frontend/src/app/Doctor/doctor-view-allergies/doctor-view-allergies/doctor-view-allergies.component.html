@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor View Allergies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+
+    h3 {
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+		.header {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+			background-color: #007bff;
+			color: white;
+			border-bottom: 3px solid #0056b3; 
+		}
+
+		.header img {
+			max-height: 60px;
+		}
+
+    /* Layout */
+    .main-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 20px;
+    }
+
+    .left, .right {
+      flex: 1;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .scroll-box {
+      max-height: 700px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      padding: 15px;
+      background-color: #fafafa;
+      border-radius: 8px;
+    }
+
+    .data-item, .allergy-item {
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.2s;
+      cursor: pointer;
+      background-color: #ffffff;
+    }
+
+    .data-item:hover, .allergy-item:hover {
+      background-color: #f0f7ff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transform: scale(1.01);
+    }
+
+    .data-item:active, .allergy-item:active {
+      background-color: #e6f0ff;
+      transform: scale(0.99);
+    }
+
+    /* Input Fields */
+    .input-box {
+      margin-bottom: 15px;
+    }
+
+    .input-box label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 2px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .get {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .get:hover {
+      background-color: #117a8b;
+    }
+
+    /* Messages */
+    .error-message {
+      color: #dc3545;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .success-message {
+      color: #28a745;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+      }
+
+      .left, .right {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <nav>
+      <a href="/doctor-panel">
+        <img src="../../../assets/ADMIN-PANEL.png" alt="Logo" />
+      </a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="left">
+      <!-- Query Boxes -->
+      <div class="input-box">
+        <label for="queryName">Query by Name:</label>
+        <input type="text" [(ngModel)]="queryData.name" id="queryName" />
+      </div>
+      <div class="input-box">
+        <label for="queryId">Query by ID:</label>
+        <input type="text" [(ngModel)]="queryData.id" id="queryId" />
+      </div>
+      <div class="input-box">
+        <label for="queryDescription">Query by Description:</label>
+        <input type="text" [(ngModel)]="queryData.description" id="queryDescription" />
+      </div>
+
+      <!-- Get Button -->
+      <div class="buttons">
+        <button class="get" (click)="getAllergies()">GET</button>
+      </div>
+    </div>
+
+    <div class="right">
+      <!-- Neat Scroll Box for Allergy Data Display -->
+      <div class="scroll-box data-display-box">
+        <h3>Allergies Data</h3>
+        <div *ngFor="let allergy of allergies" class="data-item" (click)="fetchAllergyById(allergy.id)">
+          <p><strong>ID:</strong> {{ allergy.id }}</p>
+          <p><strong>Name:</strong> {{ allergy.name }}</p>
+          <p><strong>Description:</strong> {{ allergy.description }}</p>
+          <hr />
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

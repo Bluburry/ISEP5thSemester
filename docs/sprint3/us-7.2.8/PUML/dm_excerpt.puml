@@ -1,0 +1,140 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+Package PatientAggregate {
+	Entity Patient <<(R,#0099FF) Root Entity>>{}
+
+	Class Gender <<(V,#f04800) Value Object>> {}
+	Class MedicalRecordNumber <<(V,#f09800) Unique Identifier>> {}
+	Class DateOfBirth <<(V,#f04800) Value Object>> {}
+	Class EmergencyContact <<(V,#f04800) Value Object>> {}
+	Class EmailAddress <<(V,#f04800) Value Object>> {}
+	Class PhoneNumber <<(V,#f04800) Value Object>> {}
+
+	Entity ContactInformation <<Entity>> {}
+
+	Class FirstName <<(V,#f04800) Value Object>> {}
+	Class LastName <<(V,#f04800) Value Object>> {}
+	Class FullName <<(V,#f04800) Value Object>> {}
+
+	ContactInformation "1" *--- "1" EmailAddress
+	ContactInformation "1" *--- "1" PhoneNumber
+
+	FirstName "1" -up-* "1" Patient
+	LastName "1" -up-* "1" Patient
+	FullName "1" -up-* "1" Patient
+	ContactInformation "1" -up-* "1" Patient
+	Gender "1" --* "1" Patient
+	MedicalRecordNumber "1" --* "1" Patient
+	DateOfBirth "1" --* "1" Patient
+	EmergencyContact "1" --* "1" Patient
+}
+
+Package OperationRequestAggregate {
+	Entity OperationRequest <<(R,#0099FF) Root Entity>>{}
+
+	Class OperationRequestID <<(V,#f09800) Unique Identifier>> {}
+	Class OperationDeadline <<(V,#f04800) Value Object>> {}
+	Enum OperationPriority <<(V,#f04800) Value Object>> {}
+}
+
+OperationRequestID "1" --* "1" OperationRequest
+OperationDeadline "1" --* "1" OperationRequest
+OperationPriority "1" -up-* "1" OperationRequest
+
+Package OperationTypeAggregate {
+	Entity OperationType <<(R,#0099FF) Root Entity>>{}
+
+	Class OperationTypeID <<(V,#f09800) Unique Identifier>> {}
+	Class OperationTypeName <<(V,#f04800) Value Object>> {}
+	Class EstimatedDuration <<(V,#f04800) Value Object>> {}
+	Class OperationTypeVersion <<(V,#f04800) Value Object>> {}
+	Class OperationTypeStartDate <<(V,#f04800) Value Object>> {}
+	Class OperationTypeEndDate <<(V,#f04800) Value Object>> {}
+	Class ActivationStatus <<(V,#f04800) Value Object>> {}
+
+	Entity RequiredSpecialist <<Entity>> {}
+	Class SpecialistCount <<(V,#f04800) Value Object>> {}
+
+	Entity OperationPhase <<Entity>> {}
+	Class PhaseName <<(V,#f04800) Value Object>> {}
+	Class PhaseDuration <<(V,#f04800) Value Object>> {}
+
+	ActivationStatus "1" --* "1" OperationType
+	OperationTypeID "1" --* "1"  OperationType
+	OperationTypeName "1" -up-* "1" OperationType
+	EstimatedDuration "1" -up-* "1" OperationType
+	OperationTypeVersion "1" -up-* "1" OperationType
+	OperationTypeStartDate "1" -left-* "1" OperationType
+	OperationTypeEndDate "1" -right-* "1" OperationType
+	RequiredSpecialist "*" --* "1" OperationType
+	RequiredSpecialist "*" --> "1" Specialization
+	SpecialistCount "1" -- "1" RequiredSpecialist
+	OperationPhase "*" --* "1" OperationType
+	OperationPhase "*" -up- "1" PhaseName
+	OperationPhase "*" -up- "1" PhaseDuration
+}
+
+Package SurgeryRoomAggregate {
+	Entity SurgeryRoom <<(R,#0099FF) Root Entity>>{}
+
+	Class RoomNumber  <<(V,#f09800) Unique Identifier>> {}
+	Class RoomType <<(V,#f04800) Value Object>> {}
+	Class RoomCapacity <<(V,#f04800) Value Object>> {}
+	Class RoomStatus <<(V,#f04800) Value Object>> {}
+	Class MaintenanceSlots <<(V,#f04800) Value Object>> {}
+}
+
+RoomNumber "1" -up-* "1" SurgeryRoom
+RoomType "1" -up-* "1" SurgeryRoom
+RoomCapacity "1" -right-* "1" SurgeryRoom
+RoomStatus "1" --* "1" SurgeryRoom
+MaintenanceSlots "*" --* "1" SurgeryRoom
+
+Package AppointmentAggregate {
+	Entity Appointment <<(R,#0099FF) Root Entity>>{}
+
+	Class AppointmentID <<(V,#f09800) Unique Identifier>> {}
+	Class DateAndTime <<(V,#f04800) Value Object>> {}
+	Class AppointmentStatus <<(V,#f04800) Value Object>> {}
+	Entity AssignedStaff <<Entity>>{}
+
+	AssignedStaff "*" -- "1" Appointment 
+	DateAndTime "1" --* "1" Appointment
+}
+
+AppointmentID "1" --* "1" Appointment
+AppointmentStatus "1" --* "1" Appointment
+Appointment "*" ------> "*" SurgeryRoom : reserves a
+
+Package StaffAggregate {
+	Entity Staff <<(R,#0099FF) Root Entity>>{}
+
+	Class AvailabilitySlots <<(V,#f04800) Value Object>> {}
+	Class LicenseNumber <<(V,#f09800) Unique Identifier>> {}
+
+
+	Entity ContactInformation <<Entity>> {}
+
+	Class FirstName <<(V,#f04800) Value Object>> {}
+	Class LastName <<(V,#f04800) Value Object>> {}
+	Class FullName <<(V,#f04800) Value Object>> {}
+	Class EmailAddress <<(V,#f04800) Value Object>> {}
+	Class PhoneNumber <<(V,#f04800) Value Object>> {}
+
+	ContactInformation "1" *-- "1" EmailAddress
+	ContactInformation "1" *-- "1" PhoneNumber
+
+	FirstName "1" -up-* "1" Staff
+	LastName "1" -up-* "1" Staff
+	FullName "1" -up-* "1" Staff
+	ContactInformation "1" --* "1" Staff
+	AvailabilitySlots "*" --* "1" Staff
+	LicenseNumber "1" --* "1" Staff
+}
+
+AssignedStaff "*" --- "1" Staff : reserves
+Appointment "1" ------> "1" OperationRequest : pertains to
+OperationRequest "*" ---left---> "*" Patient : pertains to
+OperationRequest "*" -----> "1" OperationType : contains
+@enduml

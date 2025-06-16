@@ -1,0 +1,49 @@
+@startuml
+
+Package PatientAggregate {
+	Entity Patient <<(R,#0099FF) Root Entity>>{}
+
+	Class Gender <<(V,#f04800) Value Object>> {}
+	Class MedicalRecordNumber <<(V,#f09800) Unique Identifier>> {}
+	Class DateOfBirth <<(V,#f04800) Value Object>> {}
+	Class EmergencyContact <<(V,#f04800) Value Object>> {}
+	Class EmailAddress <<(V,#f04800) Value Object>> {}
+	Class PhoneNumber <<(V,#f04800) Value Object>> {}
+
+	Entity ContactInformation <<Entity>> {}
+
+	Class FirstName <<(V,#f04800) Value Object>> {}
+	Class LastName <<(V,#f04800) Value Object>> {}
+	Class FullName <<(V,#f04800) Value Object>> {}
+
+	ContactInformation "1" *--- "1" EmailAddress
+	ContactInformation "1" *--- "1" PhoneNumber
+
+	FirstName "1" -up-* "1" Patient
+	LastName "1" -up-* "1" Patient
+	FullName "1" -up-* "1" Patient
+	ContactInformation "1" -up-* "1" Patient
+	Gender "1" --* "1" Patient
+	MedicalRecordNumber "1" --* "1" Patient
+	DateOfBirth "1" --* "1" Patient
+	EmergencyContact "1" --* "1" Patient
+}
+
+Package MedicalConditionAggregate {
+	Entity MedicalCondition <<(R,#0099FF) Root Entity>> {}
+
+	Class ConditionCode <<(V,#f04800) Value Object>> {}
+	Class ConditionDesignation <<(V,#f04800) Value Object>> {}
+	Class ConditionDescription <<(V,#f04800) Value Object>> {}
+	Class ConditionSymptoms <<(V,#f04800) Value Object>> {}
+
+	MedicalCondition "1" *-- "1" ConditionCode
+	MedicalCondition "1" *-- "1" ConditionDescription
+	MedicalCondition "1" *-- "1" ConditionDesignation
+	MedicalCondition "1" *-- "1" ConditionSymptoms
+
+}
+
+MedicalCondition "*" --* "1" Patient
+
+@enduml

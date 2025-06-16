@@ -1,0 +1,58 @@
+@startuml
+
+actor ADMIN as admin
+participant AllergyController as ctrl
+participant AllergyService as svc
+participant AllergyFactory as fac
+participant AllergyDto as dto
+participant AllergyRepository as repo
+
+
+activate admin
+
+admin -> ctrl : request creation of allergy
+deactivate admin
+activate ctrl
+
+
+
+ctrl --> admin : requests allergy information
+deactivate ctrl
+activate admin
+
+admin -> ctrl : input allergy information
+deactivate admin
+activate ctrl
+
+ctrl -> svc : create(code, designation, description)
+
+deactivate ctrl
+activate svc
+
+svc -> fac : create(code, designation, description)
+
+deactivate svc
+
+activate fac
+fac --> svc : allergy
+deactivate fac
+activate svc
+
+svc -> repo : save(allergy)
+deactivate svc
+activate repo
+repo --> svc : allergy
+deactivate repo
+
+activate svc
+svc ->  dto** : toDto(allergy)
+
+svc --> ctrl : allergyDto
+deactivate svc
+activate ctrl
+
+ctrl --> admin : operation result message
+deactivate ctrl
+activate admin
+
+@enduml

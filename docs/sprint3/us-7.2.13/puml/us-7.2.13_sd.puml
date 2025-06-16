@@ -1,0 +1,86 @@
+@startuml US-7.2.13_SD
+
+title Sequence Diagram - US 7.2.13
+
+participant Routing as rt
+participant SpecializationController as ctrl
+participant SpecializationService as serv
+participant SpecializationRepository as repo
+participant LogBuilder as logBuilder
+participant Specialization as spec
+participant LogRepository as logRepo
+participant SpecializationDTO as dto
+
+-> rt : PATCH(specializationDTO, authToken)
+activate rt
+
+rt -> ctrl : EditSpecialization(code, name, description, authToken)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : UpdateSpecialization(code, name, description)
+
+activate serv
+
+serv -> repo : GetByIdAsync(SpecializationCode)
+activate repo
+repo --> serv : specialization
+deactivate repo
+
+serv -> logBuilder** : create()
+serv -> logBuilder : Build()
+activate logBuilder
+logBuilder --> serv : log
+deactivate logBuilder
+
+alt name not null or empty
+
+serv -> repo : GetByName(SpecializationName)
+
+activate repo
+repo --> serv : specialization
+deactivate repo
+
+alt no specialization uses that name
+
+serv -> spec : ChangeName(SpecializationName)
+activate spec
+spec --> serv :
+deactivate spec
+
+end
+end
+
+alt description is not null or empty
+
+serv -> spec : ChangeDescription(SpecializationDescription)
+activate spec
+spec --> serv :
+deactivate spec
+
+end
+
+serv -> logRepo : AddAsync(log)
+activate logRepo
+logRepo --> serv : log
+deactivate logRepo
+
+serv -> repo : Update(specialization)
+activate repo
+repo --> serv : Specialization
+deactivate repo
+
+serv -> dto** : create()
+serv --> ctrl : specializationDTO
+
+deactivate serv
+ctrl --> rt : specializationDTO
+deactivate ctrl
+
+<-- rt : specializationDTO
+deactivate rt
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+
+Package SurgeryRoomAggregate {
+	Entity SurgeryRoom <<(R,#0099FF) Root Entity>>{}
+
+	Class RoomNumber  <<(V,#f09800) Unique Identifier>> {}
+	Class RoomType <<(V,#f04800) Value Object>> {}
+	Class RoomCapacity <<(V,#f04800) Value Object>> {}
+	Class RoomStatus <<(V,#f04800) Value Object>> {}
+	Class MaintenanceSlots <<(V,#f04800) Value Object>> {}
+}
+
+RoomNumber "1" -up-* "1" SurgeryRoom
+RoomType "1" -up-* "1" SurgeryRoom
+RoomCapacity "1" -right-* "1" SurgeryRoom
+RoomStatus "1" --* "1" SurgeryRoom
+MaintenanceSlots "*" --* "1" SurgeryRoom
+
+@enduml

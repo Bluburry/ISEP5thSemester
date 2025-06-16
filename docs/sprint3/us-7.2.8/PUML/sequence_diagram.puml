@@ -1,0 +1,112 @@
+@startuml
+
+participant Routing as route
+participant AppointmentController as ctrl
+participant AppointmentService as apptSvc
+participant AppointmentRepository as apptRepo
+participant AssignedStaffRepository as assignedRepo
+participant PatientRepository as patRepo
+participant OperationRequestRepository as reqRepo
+participant OperationRoomRepository as roomRepo
+participant Appointment as appt
+participant AppointmentBuilder
+
+-> route : PUT(dateAndTime, staffIDs, patientNumber, \noperationRoom, requestID, auth)
+activate route
+route -> ctrl : RegisterAppointment(dateAndTime, staffIDs, patientNumber, \noperationRoom, requestID, auth)
+deactivate route
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> apptSvc : registerSurgeryAppointment(dateAndTime, patientNumber, \nstaffIDs, operationRoom, requestID)
+deactivate ctrl
+activate apptSvc
+
+apptSvc -> patRepo : GetByIdAsync(patientNumber)
+deactivate apptSvc
+activate patRepo
+
+patRepo --> apptSvc : patient
+deactivate patRepo
+activate apptSvc
+
+apptSvc -> reqRepo : GetByIdAsync(requestID)
+deactivate apptSvc
+activate reqRepo
+
+reqRepo --> apptSvc : operationRequest
+deactivate reqRepo
+activate apptSvc
+
+apptSvc -> roomRepo : GetByIdAsync(operationRoom)
+deactivate apptSvc
+activate roomRepo
+
+roomRepo --> apptSvc : room
+deactivate roomRepo
+activate apptSvc
+
+apptSvc -> AppointmentBuilder** : create()
+apptSvc -> AppointmentBuilder : BuildAppointmentWithData(dateAndTime, "SCHEDULED", operationRequest, room)
+deactivate apptSvc
+activate AppointmentBuilder 
+
+AppointmentBuilder --> apptSvc : appointment
+deactivate AppointmentBuilder 
+activate apptSvc
+
+loop for each staffID in staffIDs
+	apptSvc -> staffRepo : GetStaffByLicense(staffID)
+	deactivate apptSvc
+	activate staffRepo
+
+	staffRepo -> apptSvc : staff
+	deactivate staffRepo
+	activate apptSvc
+
+	apptSvc -> assignedRepo : Add(staff, appointment)
+	deactivate apptSvc
+	activate assignedRepo
+
+	assignedRepo -> apptSvc : staff
+	deactivate assignedRepo
+	activate apptSvc
+
+	apptSvc -> assignedRepo : Remove(staff)
+end
+
+apptSvc -> appt : ChangeTeam(staff)
+deactivate apptSvc 
+activate appt
+
+appt --> apptSvc
+deactivate appt 
+activate apptSvc
+
+appt --> apptSvc
+deactivate appt 
+activate apptSvc
+
+apptSvc -> apptRepo : AddAsync(appointment)
+deactivate apptSvc
+activate apptRepo
+
+apptRepo --> apptSvc : appointment
+deactivate apptRepo
+activate apptSvc
+
+apptSvc --> ctrl : appointmentDto
+deactivate apptSvc
+activate ctrl
+
+ctrl --> route : appointmentDto 
+deactivate ctrl
+activate route 
+
+<-- route : appointmentDto
+deactivate route
+
+@enduml

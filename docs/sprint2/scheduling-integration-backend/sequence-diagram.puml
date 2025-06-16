@@ -1,0 +1,30 @@
+@startuml
+autonumber
+
+actor Admin as act
+participant System as sys
+
+activate act
+
+act -> sys : requests schedulling of operation
+
+deactivate act
+
+activate sys
+
+sys --> act : requests scheduling data
+deactivate sys
+
+activate act
+act -> sys : inputs scheduling data
+
+deactivate act
+activate sys
+
+sys --> act
+
+deactivate sys
+
+activate act
+
+@enduml

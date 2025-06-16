@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap');
+
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			font-family: 'Lexend', sans-serif;
+			background-color: #f0f2f5;
+		}
+
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px;
+			background-color: #d9534f;
+			/* Red background */
+			color: white;
+			border-bottom: 3px solid #c9302c;
+			/* Darker red for the border */
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.user-info {
+			display: flex;
+			flex-direction: column;
+			text-align: left;
+		}
+
+		.user-info .user-name {
+			font-size: 1.5em;
+			font-weight: bold;
+		}
+
+		.user-info .user-role {
+			font-size: 1em;
+			margin-top: 5px;
+		}
+
+		.logOut {
+			background-color: white;
+			color: #d9534f;
+			/* Red color for the text */
+			border: 1px darkred solid;
+			padding: 10px 15px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			font-size: 1em;
+			border-radius: 12px;
+			white-space: nowrap;
+			/* Prevent text from wrapping */
+			margin: 0;
+			display: inline-block;
+			/* Ensure it stays in line within the flex container */
+			box-sizing: border-box;
+		}
+
+		.logOut:hover {
+			background-color: #f7d0d0;
+			/* Light red hover effect */
+			color: #a94442;
+			/* Darker red for text on hover */
+			box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+		}
+
+		.container {
+			padding: 10px;
+			width: 100%;
+			min-height: 100%;
+			background-color: #f0f2f5;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			text-align: center;
+		}
+
+		.action-header {
+			font-size: 1.5em;
+			font-weight: 700;
+			margin-bottom: 20px;
+			color: #333;
+		}
+
+		.button-group {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			/* 3 columns */
+			gap: 30px 100px;
+			margin-top: 20px;
+			justify-items: center;
+			/* Centers the buttons horizontally */
+		}
+
+		.button-group button {
+			padding: 10px 20px;
+			font-size: 1em;
+			font-weight: bold;
+			border-radius: 18px;
+			border: 1px darkblue solid;
+			background-color: #d9534f;
+			/* Red button background */
+			color: white;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			width: 200px;
+			/* Fixed button width */
+			height: 70px;
+		}
+
+		.button-group button:hover {
+			background-color: #c9302c;
+			/* Darker red on hover */
+			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+			scale: 110%;
+		}
+
+		.button-group button:focus {
+			outline: none;
+			box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="header">
+		<div class="user-info">
+			<div class="user-name">{{ user }}</div>
+			<div class="user-role">{{ role }}</div>
+		</div>
+
+		<div>
+			<button class="logOut" (click)="logout()">Log out</button>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="action-header">
+			Here are the actions you can perform:
+		</div>
+		<div class="button-group">
+			<button (click)="navigateToPanel('admin-patient-create')">Patient Creation</button>
+			<button (click)="navigateToPanel('admin-patient-control')">Patient Control</button>
+			<button (click)="navigateToPanel('admin-staff-create')">Staff Create</button>
+			<button (click)="navigateToPanel('admin-staff-control')">Staff Control</button>
+			<button (click)="navigateToPanel('admin-operation-type-creation')">Operation Type Creation</button>
+			<button (click)="navigateToPanel('admin-operation-type-control')">Operation Type Control</button>
+			<button (click)="navigateToPanel('schedule-control')">Schedulling</button>
+			<button (click)="navigateToPanel('admin-allergy-control')">Allergy Management</button>
+			<button (click)="navigateToPanel('admin-condition-control')">Medical Condition Creation</button>
+			<button (click)="navigateToPanel('app-operation-room-type-create')">Room Type Creation</button>
+			<button (click)="navigateToPanel('specialization-creation')">Specialization Creation</button>
+			<button (click)="navigateToPanel('specialization-control')">Specialization control</button>
+
+		</div>
+	</div>
+
+</body>
+
+</html>

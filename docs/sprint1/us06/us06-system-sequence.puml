@@ -1,0 +1,40 @@
+@startuml
+
+Actor User as act 
+Participant System as sys
+
+activate act
+
+act -> sys : inputs credentials
+deactivate act
+activate sys
+
+
+
+loop while authentication faisl
+
+sys --> act : requests new credentials
+deactivate sys
+activate act
+
+act -> sys : re-introduces the credentials
+deactivate act
+activate sys
+
+alt if authentication limit is reached
+
+sys --> act : informs user that he has been locked out
+
+
+end
+
+end loop
+
+sys --> act : shows homepage
+deactivate sys
+activate act
+
+
+
+
+@enduml

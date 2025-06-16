@@ -1,0 +1,46 @@
+@startuml US-7.2.12_SD
+
+title Sequence Diagram - US 7.2.12
+
+participant Routing as rt
+participant SpecializationController as ctrl
+participant SpecializationService as serv
+participant SpecializationRepository as repo
+participant SpecializationDTO as dto
+
+-> rt : GET(code, name, authToken)
+activate rt
+
+rt -> ctrl : FilteredSearch(code, name)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : FilteredGet(code, name)
+
+activate serv
+
+alt code is null or empty
+serv -> repo : GetByName(SpecializationName)
+activate repo
+
+else
+serv -> repo : GetByIdAsync(SpecializationCode)
+end
+
+repo --> serv : Specialization
+deactivate repo
+
+serv -> dto** : create()
+serv --> ctrl : specializationDTO
+deactivate serv
+
+ctrl --> rt : specializationDTO
+deactivate ctrl
+
+<-- rt : specializationDTO
+deactivate rt
+
+@enduml

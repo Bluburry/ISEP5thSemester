@@ -1,0 +1,25 @@
+@startuml
+
+actor Admin as admin
+actor System as sys
+
+
+activate admin
+
+admin -> sys : request creation of medical conditions
+deactivate admin
+activate sys
+
+sys --> admin : requests medical conditions information
+deactivate sys
+activate admin
+
+admin -> sys : input medical conditions information
+deactivate admin
+activate sys
+
+sys --> admin : operation result message
+deactivate sys
+activate admin
+
+@enduml

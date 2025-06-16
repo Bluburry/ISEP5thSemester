@@ -1,0 +1,93 @@
+@startuml
+
+participant Routing as route
+participant RegisterBackofficeController as ctrl
+participant UserService as userSvc
+participant TokenService
+participant TokenDTO
+participant UserDTO
+participant UserFactory as userFac
+participant UserRepository as userRepo
+participant TokenFactory as tokenFac
+participant TokenRepository as tokenRepo
+participant EmailService as emailSvc
+
+
+-> route : POST(backofficeData, authToken)
+activate route
+route -> ctrl : RegisterBackoffice(email, authToken)
+deactivate route
+activate ctrl
+
+REF OVER ctrl
+REFER TO GENERIC AUTH SD
+end
+ctrl -> userSvc : RegisterBackofficeUserAsync(email)
+deactivate ctrl
+
+activate userSvc
+
+userSvc -> userFac : getUserWithoutPassword(emailAddress, role)
+deactivate userSvc
+activate userFac
+
+userFac --> userSvc : user
+deactivate userFac
+
+activate userSvc
+userSvc -> userRepo : AddAsync(user)
+
+deactivate userSvc
+activate userRepo
+
+userRepo --> userSvc : user
+
+deactivate userRepo
+activate userSvc
+
+userSvc -> UserDTO** : create()
+userSvc --> ctrl : userDTO
+deactivate userSvc
+activate ctrl
+
+
+
+
+ctrl -> TokenService : generatePasswordValidationToken(userDTO)
+
+deactivate ctrl
+activate TokenService
+TokenService -> tokenFac : getToken(userDTO)
+
+deactivate TokenService
+activate tokenFac
+
+tokenFac --> TokenService : token
+deactivate tokenFac
+
+activate TokenService
+ TokenService -> TokenDTO** : create()
+
+ TokenService --> ctrl : tokenDTO
+ deactivate TokenService
+
+ activate ctrl
+
+
+
+ ctrl -> emailSvc : sendActivationNotification(emailAddress, tokenDTO)
+ deactivate ctrl
+ activate emailSvc
+
+ emailSvc --> ctrl : opResult
+ deactivate emailSvc
+ activate ctrl
+
+route <-- ctrl : opResultMessage
+deactivate ctrl
+activate route
+<-- route : opResultMessage
+deactivate route
+
+
+@enduml

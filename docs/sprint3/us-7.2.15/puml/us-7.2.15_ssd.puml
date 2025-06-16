@@ -1,0 +1,25 @@
+@startuml US-7.2.15_SSD
+
+title System Sequence Diagram - US 7.2.15
+
+autonumber
+
+actor "Admin" as adm
+participant "System" as app
+
+activate adm
+
+	adm -> app : delete specialization
+	activate app
+		app --> adm : request specialization code
+	deactivate app
+
+	adm -> app : inputs requested info
+	activate app
+		app --> adm : confirms operation type creation
+	deactivate app
+
+deactivate adm
+
+
+@enduml

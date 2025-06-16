@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor Doctor
+Participant System
+
+activate Doctor
+
+Doctor -> System : requests to edit appointment
+deactivate Doctor
+activate System
+
+System --> Doctor : displays appointments
+deactivate System
+activate Doctor
+
+Doctor -> System : chooses appointment
+deactivate Doctor
+activate System
+
+System -> Doctor : shows appointment information
+deactivate System
+activate Doctor
+
+Doctor --> System : updates information
+deactivate Doctor
+activate System
+
+System --> Doctor : success information message
+deactivate System
+activate Doctor
+
+@enduml

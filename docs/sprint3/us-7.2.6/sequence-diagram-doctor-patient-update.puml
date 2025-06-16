@@ -1,0 +1,67 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant Routing as route
+participant ClinicalDetailsController as ctrl
+participant ClinicalDetailsService as svc
+participant ClinicalDetailMap as map
+participant ConditionRepository as condRepo
+participant LoggingService as logSvc
+
+-> route : POST(ClinicalDetailsDTO)
+
+activate route
+    route -> ctrl : saveClinicalDetails(authToken, \nclinicalDetailsDTO)
+deactivate route
+
+activate ctrl
+    note right ctrl
+    **Token Authentication Process** to 
+    validate the user permissions 
+    end note
+    ctrl -> svc : save(clinicalDetailsDTO)
+deactivate ctrl
+
+activate svc
+    svc -> map : toDomain(clinicalDetailsDTO)
+    note right map
+    Converts DTO to actual object, by getting
+    each disease from the repo through their ID
+    end note
+deactivate svc
+
+activate map
+    map --> svc: clinicalDetailsOrError
+deactivate map
+    
+activate svc    
+    alt If any disease doesn't exist, process returns error
+    <-- svc : error() 
+    end 
+    svc -> condRepo : save(clinicalDetailsOrError)
+deactivate svc
+
+activate condRepo
+    condRepo --> svc : condition
+deactivate condRepo
+
+activate svc
+    svc -> map : toDTO()
+deactivate svc
+
+activate map
+    map --> svc : clinicalDetailsDTO
+deactivate map
+
+activate svc
+    svc --> ctrl : clinicalDetailsDTO
+deactivate svc
+
+activate ctrl
+    ctrl --> route : clinicalDetailsDTO
+deactivate ctrl
+activate route
+<-- route : clinicalDetailsDTO
+deactivate route
+@enduml

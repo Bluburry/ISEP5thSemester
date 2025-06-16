@@ -1,0 +1,44 @@
+@startuml
+
+participant StaffController as ctrl
+participant UserService as usrSvc
+participant UserRepository as usrRepo
+participant UserDTO
+participant TokenRepository as tknRepo
+participant EmailService as emailSvc 
+
+
+activate ctrl
+ctrl -> usrSvc : GetByIdAsync(staffEmail)
+deactivate ctrl
+activate usrSvc
+
+usrSvc -> usrRepo : GetByIdAsync(staffEmail)
+deactivate usrSvc
+activate usrRepo
+
+usrRepo --> usrSvc : user
+deactivate usrRepo
+activate usrSvc
+
+usrSvc -> UserDTO** : create()
+usrSvc --> ctrl : userDTO 
+deactivate usrSvc
+activate ctrl
+
+ctrl -> tknRepo : GeneratePasswordValidationTokenAsync(userDTO)
+deactivate ctrl
+activate tknRepo
+
+tknRepo -> ctrl : tokenDTO
+deactivate tknRepo
+activate ctrl
+
+ctrl -> emailSvc : sendContactConfirmation(oldStaffEmail, tokenDTO, log)
+deactivate ctrl
+activate emailSvc
+
+emailSvc --> ctrl :
+deactivate emailSvc
+activate ctrl 
+@enduml

@@ -1,0 +1,58 @@
+@startuml US-7.2.11_SD
+
+title Sequence Diagram - US 7.2.11
+
+participant Routing as rt
+participant SpecializationController as ctrl
+participant SpecializationService as serv
+participant SpecializationRepository as repo
+participant SpecializationBuilder as builder
+participant SpecializationDTO as dto
+
+-> rt : POST(specializationDTO, authToken)
+activate rt
+
+rt -> ctrl : CreateSpecialization(code, name, description)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : CreateSpecialization(code, name, description)
+
+activate serv
+
+serv -> repo : GetByName(SpecializationName)
+
+activate repo
+repo --> serv : OperationType
+deactivate repo
+
+alt no specialization with that name exists
+
+serv -> builder** : create()
+
+serv -> builder : createSpecialization(code, name, description)
+
+activate builder
+builder --> serv : specialization
+deactivate builder
+
+serv -> repo : AddAsync(specialization)
+
+activate repo
+repo --> serv : specialization
+deactivate repo
+
+serv -> dto** : create()
+serv --> ctrl : specializationDTO
+deactivate serv
+end
+ctrl --> rt : specializationDTO
+deactivate ctrl
+
+<-- rt : specializationDTO
+deactivate rt
+
+@enduml

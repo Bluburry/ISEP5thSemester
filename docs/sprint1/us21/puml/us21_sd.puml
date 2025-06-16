@@ -1,0 +1,84 @@
+@startuml US21_SD
+
+title Sequence Diagram - US 21
+
+participant Routing as rt
+participant RegisterOperationTypeController as ctrl
+participant OperationTypeService as serv
+participant OperationTypeRepository as repo
+participant SpecializationRepository as spRepo
+participant OperationTypeBuilder as builder
+participant OperationType as op
+participant OperationTypeDTO as dto
+
+-> rt : POST(operationTypeName, operationType, authToken)
+activate rt
+
+rt -> ctrl : UpdateByName(operationTypeName, operationTypeDTO)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : UpdateOperationType(OperationTypeName, OperationTypeDTO)
+
+activate serv
+
+serv -> repo : GetByNameLatest(OperationTypeName)
+
+activate repo
+repo --> serv : OperationType
+deactivate repo
+
+
+loop each Specialization mentioned
+serv -> spRepo : GetByIdAsync(SpecializationName)
+
+activate spRepo
+spRepo --> serv : Specialization
+deactivate spRepo
+
+end loop
+
+serv -> builder : createOperationType(OperationTypeName, OperationTypeVersion, OperationTypeEstimatedDuration,\nSpecializations, SpecializationsCount, OperationPhases, PhasesDuration)
+
+activate builder
+builder --> serv : operationType
+deactivate builder
+
+serv ->  op : DeactivateOperationType()
+
+activate op
+op --> serv :
+deactivate op
+
+serv -> op : ChangeEndDateNow()
+
+activate op
+op --> serv :
+deactivate op
+
+serv -> repo : Update(OperationType)
+
+activate repo
+repo --> serv : operationType
+deactivate repo
+
+serv -> repo : AddAsync(OperationType)
+
+activate repo
+repo --> serv : operationType
+deactivate repo
+
+serv -> dto** : create()
+serv --> ctrl : operationTypeDTO
+deactivate serv
+
+ctrl --> rt : operationResult
+deactivate ctrl
+
+<-- rt : operationResult
+deactivate rt
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml US23_SD
+
+title Sequence Diagram - US 23
+
+participant Routing as rt
+participant RegisterOperationTypeController as ctrl
+participant OperationTypeService as serv
+participant OperationTypeRepository as repo
+participant OperationTypeDTO as dto
+
+-> rt : POST(operationTypeName, authToken)
+activate rt
+
+rt -> ctrl : FilteredSearch(operationName,\nspecialization, activeStatus, authToken)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : FilteredGet(OperationName,\nSpecialization, ActiveStatus)
+
+activate serv
+
+serv -> repo : GetFiltered(OperationName,\nSpecialization, ActivateStatus)
+
+activate repo
+repo --> serv : OperationTypes
+deactivate repo
+
+loop for each operation type
+serv -> dto** : create()
+end loop
+
+serv --> ctrl : operationTypeDTO
+deactivate serv
+
+ctrl --> rt : operationResult
+deactivate ctrl
+
+<-- rt : operationResult
+deactivate rt
+
+@enduml

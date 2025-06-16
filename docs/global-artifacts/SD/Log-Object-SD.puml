@@ -1,0 +1,50 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+participant GenericController as ctrl
+participant LogService as svc
+participant LogBuilder as build
+participant LogDto as dto
+participant LogRepository as repo
+
+activate ctrl
+
+ctrl -> svc : LogObject(GenericObject)
+deactivate ctrl
+activate svc
+
+svc -> svc : AddAsync(logDto)
+activate svc
+
+svc -> build**: create()
+
+svc -> build : Build()
+deactivate svc
+deactivate svc
+
+
+activate build
+build --> svc : log
+deactivate build
+activate svc
+
+svc -> repo : AddAsync(log)
+deactivate svc
+activate repo
+
+repo --> svc : log
+deactivate repo
+activate svc
+activate svc
+
+svc -> dto** : create()
+svc --> svc :logDto
+deactivate svc
+
+
+svc -> ctrl
+deactivate svc
+
+activate ctrl
+
+@enduml

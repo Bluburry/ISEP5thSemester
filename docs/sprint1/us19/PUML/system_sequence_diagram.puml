@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor Doctor
+Participant System
+
+activate Doctor
+
+Doctor -> System : requests to list operation requests
+deactivate Doctor
+activate System
+
+System --> Doctor : displays operation requests
+deactivate System
+activate Doctor
+
+@enduml

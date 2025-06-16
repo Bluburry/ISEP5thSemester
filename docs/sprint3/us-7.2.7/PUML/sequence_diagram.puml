@@ -1,0 +1,50 @@
+@startuml
+
+participant Routing
+participant ClinicalDetailsController as ctrl
+participant ClinicalDetailsService as svc
+participant ClinicalDetailsDto as dto
+participant ClinicalDetailsRepository as repo
+
+-> Routing : GET(token, allergyID, medicalConditionID)
+activate Routing
+    Routing -> ctrl : filterClinicalDetails(token, allergyID, medicalConditionID)
+deactivate Routing
+
+activate ctrl
+    ctrl -> svc : filterByValues(allergyID, medicalConditionID)
+deactivate ctrl
+
+activate svc
+    svc -> repo : getAll()
+deactivate svc
+
+activate repo
+    repo --> svc : clinicalDetails
+deactivate repo
+
+activate svc
+    svc ->  dto** : clinicalDetails.toDto()
+
+    loop for each clinicalDetailDto
+        alt allergyID is in the clinicalDetail
+            svc -> svc : store clinicalDetail
+        end
+
+        alt medicalConditionID is in the clinicalDetail
+            svc -> svc : store clinicalDetail
+        end
+    end
+
+    svc -> ctrl : storedClinicalDetailsDTO 
+deactivate svc 
+
+activate ctrl
+    ctrl --> Routing : storedClinicalDetailsDTO
+deactivate ctrl
+
+activate Routing
+    <--- Routing : storedClinicalDetailsDTO
+deactivate Routing
+
+@enduml

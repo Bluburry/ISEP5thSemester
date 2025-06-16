@@ -1,0 +1,68 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+Package UserAggregate {
+    Entity User <<(V,#0000FF) Root Entity>>{}
+
+    Class ActivationStatus  <<(V,#f04800) Value Object>> {}
+    Class Username <<(V,#f09800) Unique Identifier>> {}
+    Enum UserRole <<(V,#f04800) Value Object>> {}
+    Class EmailAddress <<(V,#f04800) Value Object>> {}
+    Class Password <<(V,#f04800) Value Object>> {}
+
+     ActivationStatus "1" -* "1" User
+
+    Username "1" --* "1" User
+    UserRole "1" --* "1" User
+    EmailAddress "1" --* "1" User
+    Password "1" --* "1" User
+}
+
+Package StaffAggregate {
+    Entity Staff <<(V,#0000FF) Root Entity>>{}
+
+    Class AvailabilitySlots <<(V,#f04800) Value Object>> {}
+    Class LicenseNumber <<(V,#f09800) Unique Identifier>> {}
+
+
+    Entity ContactInformation <<Entity>> {}
+
+    Class FirstName <<(V,#f04800) Value Object>> {}
+    Class LastName <<(V,#f04800) Value Object>> {}
+    Class FullName <<(V,#f04800) Value Object>> {}
+    Class EmailAddress <<(V,#f04800) Value Object>> {}
+    Class PhoneNumber <<(V,#f04800) Value Object>> {}
+
+
+
+    ContactInformation "1" *-- "1" EmailAddress
+    ContactInformation "1" *-- "1" PhoneNumber
+
+
+    FirstName "1" -up-* "1" Staff
+    LastName "1" -up-* "1" Staff
+    FullName "1" -up-* "1" Staff
+    ContactInformation "1" --* "1" Staff
+    AvailabilitySlots "*" --* "1" Staff
+    LicenseNumber "1" --* "1" Staff
+}
+
+Package SpecializationAggregate{
+    Entity Specialization <<(V,#0000FF) Root Entity>>{}
+    Class SpecializationName <<(V,#f09800) Unique Identifier>> {}
+
+    SpecializationName "1" --* "1" Specialization : identifies
+}
+
+Package DoctorAggregate{
+	Entity Doctor <<(R,#0099FF) Root Entity>>{}
+	Class DoctorID <<(V,#f09800) Unique Identifier>> {}
+
+	DoctorID "1" --* "1" Doctor : identifies
+}
+
+Doctor "0..1" <--- "1" Staff : may be
+Specialization "1" <--- "1" Staff : has a
+
+Staff -up-> User : is a
+@enduml

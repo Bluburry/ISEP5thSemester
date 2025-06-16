@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+
+    h3 {
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .header {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+			background-color: #d9534f; /* Red background */
+			color: white;
+			border-bottom: 3px solid #c9302c; /* Darker red for the border */
+		}
+
+    .header nav img {
+      width: 60px;
+    }
+
+    /* Layout */
+    .main-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 20px;
+    }
+
+    .left, .right {
+      flex: 1;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .scroll-box {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      padding: 15px;
+      background-color: #fafafa;
+      border-radius: 8px;
+    }
+
+    .data-item, .allergy-item {
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.2s;
+      cursor: pointer;
+      background-color: #ffffff;
+    }
+
+    .data-item:hover, .allergy-item:hover {
+      background-color: #f0f7ff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transform: scale(1.01);
+    }
+
+    .data-item:active, .allergy-item:active {
+      background-color: #e6f0ff;
+      transform: scale(0.99);
+    }
+
+    /* Input Fields */
+    .input-box {
+      margin-bottom: 15px;
+    }
+
+    .input-box label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      display: flex;
+      justify-content: center; /* Center the button */
+    }
+
+    .create, .get, .update {
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .create {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .create:hover {
+      background-color: #218838;
+    }
+
+    .get {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .get:hover {
+      background-color: #117a8b;
+    }
+
+    .update {
+      background-color: #ffc107;
+      color: #212529;
+    }
+
+    .update:hover {
+      background-color: #e0a800;
+    }
+
+    .select-content {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 20px;
+    }
+
+    .details-box {
+      margin-bottom: 15px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      color: #333;
+    }
+
+    .details-box label {
+      font-weight: bold;
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+    }
+
+    .details-box span {
+      font-size: 1rem;
+      display: block;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-content {
+        flex-direction: column;
+      }
+
+      .left, .right {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <nav>
+      <a href="/adminPanel">
+        <img src="../../../assets/ADMIN-PANEL.png" alt="Logo" />
+      </a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="left">
+      <!-- Create Allergy Box -->
+      <div class="input-box">
+        <label for="createCode">Code (6-12 Digits):</label>
+        <input type="text" [(ngModel)]="createData.code" id="createCode" />
+      </div>
+      <div class="input-box">
+        <label for="createDesignation">Designation:</label>
+        <input type="text" [(ngModel)]="createData.designation" id="createDesignation" />
+      </div>
+      <div class="input-box">
+        <label for="createSymptoms">Symptoms:</label>
+        <input type="text" [(ngModel)]="createData.symptoms" id="createSymptoms" />
+      </div>
+      <div class="input-box">
+        <label for="createDescription">Description (optional):</label>
+        <input type="text" [(ngModel)]="createData.description" id="createDescription" />
+      </div>
+
+      <!-- Create Button -->
+      <div class="buttons">
+        <button class="create" (click)="createMedicalCondition()">CREATE</button>
+      </div>
+
+      <!-- Sucess Message -->
+      <p style="margin-top: 15px; color: #4CAF50; font-weight: bold; text-align: center;">{{ sucessMessage }}</p>
+
+      <!-- Sucess Message -->
+      <p style="margin-top: 15px; color: #FF5722; font-weight: bold; text-align: center;">{{ errorMessage }}</p>
+
+
+    </div>
+    <div class="right">
+      <!-- Neat Scroll Box for Allergy Data Display -->
+      <div class="scroll-box data-display-box">
+        <h3>Medical Conditions Data</h3>
+        <div *ngFor="let condition of conditions" class="data-item" (click)="fetchConditionById(condition.code)">
+          <p><strong>Code:</strong> {{ condition.code }}</p>
+          <p><strong>Name:</strong> {{ condition.designation }}</p>
+          <p><strong>Description:</strong> {{ condition.description }}</p>
+          <hr />
+        </div>
+      </div>
+    </div>
+    <div class="right" *ngIf="selectedCondition">  
+      <!-- Editable Allergy Box -->
+      <div class="select-content" *ngIf="selectedCondition">
+        <div class="details-box">
+          <label>Code:</label>
+          <span>{{ selectedCondition!.code }}</span>
+        </div>
+        <div class="details-box">
+          <label>Designation:</label>
+          <span>{{ selectedCondition!.designation }}</span>
+        </div>
+        <div class="details-box">
+          <label>Symptoms:</label>
+          <span>{{ selectedCondition!.symptoms }}</span>
+        </div>
+        <div class="details-box">
+          <label>Description:</label>
+          <span>{{ selectedCondition!.description }}</span>
+        </div>
+      </div>
+      <p style="margin-top: 15px; color: #FF5722; font-weight: bold; text-align: center;">{{ statusMessage }}</p>
+    </div>
+  </div>
+</body>
+</html>

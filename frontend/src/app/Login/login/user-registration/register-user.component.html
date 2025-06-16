@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Page</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f4f4f4;
+    }
+
+    .register-container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      width: 100%;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .register-container h2 {
+      margin-bottom: 1rem;
+      color: #333333;
+    }
+
+    .register-container input[type="text"],
+    .register-container input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 1rem 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .register-container button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .register-button {
+      background-color: #4CAF50;
+      margin-bottom: 0.5rem;
+    }
+
+    .register-button:hover {
+      background-color: #193b1b;
+    }
+
+    .google-button {
+      background-color: #DB4437;
+    }
+
+    .google-button:hover {
+      background-color: #3f1410;
+    }
+
+    .login-button {
+      background-color: #c81ff7;
+    }
+
+    .login-button:hover {
+      background-color: #340841;
+    }
+
+    .register-container .forgot-password {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .register-container .forgot-password:hover {
+      color: #4CAF50;
+    }
+
+    .error-message {
+      margin-top: 15px;
+      color: #FF5722;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .separator {
+      border: 0;
+      height: 1px;
+      background: #ddd;
+      margin: 1.5rem 0;
+    }
+
+    .input-box {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      background-color: #f9f9f9;
+      padding: 8px;
+      border-radius: 8px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .input-box label {
+      font-weight: bold;
+      width: 130px;
+      text-align: right;
+      margin-right: 10px;
+    }
+    .input-box input {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      width: 100%;
+      font-size: 14px;
+    }
+    .input-box input:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+    .blue{
+      color:blue;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="register-container" *ngIf="showRegister">
+    <h2>Register</h2>
+    <form (ngSubmit)="onRegister()">
+      <div class="form-group">
+        <input
+          type="text"
+          id="username"
+          [(ngModel)]="username"
+          name="username"
+          required
+          placeholder="Enter username"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          placeholder="Enter password"
+        />
+      </div>
+      <input type="checkbox" [(ngModel)]="acceptPolicy" name="acceptPolicy" value="accept" required *ngIf="read"/>
+      <label>
+        I agree to the <a class="blue" (click)="navigateToPanel()">Privacy Policy</a>
+      </label>
+      <button class="register-button" type="submit">Register User</button>
+      <button class="google-button" type="button" (click)="onRegisterExternal()">Google Register</button>
+      <p class="error-message">{{ errorMessage }}</p>
+      <!-- Line here -->
+      <hr class="separator" />
+      <h5>Already have an account?</h5>
+      <button class="login-button" type="button" (click)="navigateToHome()">Login Account</button>
+    </form>
+  </div>
+
+  <div class="register-container" *ngIf="showConfirmationCode">
+    <h3>The registration request was a sucess. An email was sent to confirm the registration process:</h3>
+    &nbsp;
+    <div class="input-box">
+      <label for="confirmationCode">Confirmation Code:</label>
+      <input type="text" [(ngModel)]="confirmationCode" id="confirmationCode" />
+    </div>
+    <button class="register-button" type="button" (click)="confirmRegistration()">Confirm Registration</button>
+    <p class="error-message">{{ errorMessage2 }}</p>
+  </div>
+  
+
+</body>
+</html>

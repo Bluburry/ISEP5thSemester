@@ -1,0 +1,81 @@
+@startuml
+
+autonumber
+
+participant OperationRequestController as ctrl
+participant OperationRequestService as opSvc
+participant StaffService as staffSvc
+participant SchedullingModuleService as scheduleSvc
+participant AppointmentService as appSvc
+participant OperationRequestRepository as opRepo
+participant StaffRepository as staffRepo
+participant AppointmentRespository as apRepo
+participant SchedullingModule as schedule
+
+-> ctrl : POST(OperationSchedulingDto)
+
+activate ctrl
+ctrl -> opSvc : getById(OperationRequestId)
+deactivate ctrl
+activate opSvc
+opSvc -> opRepo : getById(OperationRequestId)
+deactivate opSvc
+activate opRepo
+opRepo --> opSvc : operationRequest
+deactivate opRepo
+activate opSvc
+
+
+opSvc --> ctrl : operationRequestDto
+deactivate opSvc
+activate ctrl
+
+ctrl -> staffSvc : getAssociatedSchedules(staffList)
+deactivate ctrl
+activate staffSvc
+staffSvc -> staffRepo : GetAllById(staffIdList)
+deactivate staffSvc
+activate staffRepo
+staffRepo --> staffSvc : staff
+deactivate staffRepo
+activate staffSvc
+staffSvc --> ctrl : staffSchedules
+deactivate staffSvc
+activate ctrl
+ctrl -> scheduleSvc : schedule(operation, staffScheduleList)
+deactivate ctrl
+
+activate scheduleSvc
+
+scheduleSvc -> schedule : schedule()
+deactivate scheduleSvc
+activate schedule
+schedule --> scheduleSvc : output
+deactivate schedule
+
+activate scheduleSvc
+scheduleSvc --> ctrl : appointmentInformation
+deactivate scheduleSvc
+activate ctrl
+
+ctrl -> appSvc : appointmentInformation
+deactivate ctrl
+activate appSvc
+
+LOOP for every appointment
+appSvc -> apRepo
+deactivate appSvc
+
+activate apRepo
+apRepo --> appSvc : appointment
+deactivate apRepo
+activate appSvc
+end
+
+appSvc --> ctrl : appointmentDto
+deactivate appSvc
+activate ctrl
+<-- ctrl : Ok(appointmentDto)
+deactivate ctrl
+
+@enduml

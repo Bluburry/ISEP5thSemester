@@ -1,0 +1,44 @@
+@startuml
+
+Actor Patient as act 
+Participant System as sys
+
+activate act
+act -> sys : requests user creation
+deactivate act
+
+activate sys
+sys --> act : requests type of registration
+deactivate sys
+
+activate act
+act -> sys : selects type of registration
+deactivate act 
+alt If Manual Registration is selected
+activate sys
+sys --> act : request the user information
+deactivate sys
+
+activate act
+act -> sys : provides requested information
+deactivate act
+
+activate sys
+sys --> sys : sends verification\nemail to the patient
+else If IAM Registration is selected
+sys --> act : asks to login through the IAM service
+deactivate sys
+
+activate act
+act -> sys : logins through the IAM service
+deactivate act
+activate sys
+sys --> sys: gets IAM\nservice response
+
+end alt
+sys --> act : success information message
+deactivate sys
+
+activate act
+
+@enduml

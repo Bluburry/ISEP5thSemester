@@ -1,0 +1,165 @@
+@startuml
+
+participant Routing as route
+participant StaffController as ctrl
+participant StaffService as staffSvc
+participant TokenService as tknSvc
+participant Staff as staff
+participant LogsBuilder
+participant TokenRepository as tknRepo
+participant StaffRepository as staffRepo
+participant LogsRepository as logsRepo
+participant SpecializationRepository as specRepo
+participant AvailabilitySlotsRepository as avalRepo
+participant ContactInformationRepository as contactRepo
+
+-> route : PUT(tokenId, password, logId)
+activate route
+route -> ctrl : UpdateStaff(newStaffDTO, auth)
+deactivate route
+activate ctrl
+
+ctrl -> tknSvc : GetByIdAsync(tokenId)
+deactivate ctrl
+activate tknSvc
+
+tknSvc -> tknRepo : GetByIdAsync(tokenId) 
+deactivate tknSvc
+activate tknRepo
+
+tknRepo --> tknSvc : token
+deactivate tknRepo
+activate tknSvc
+
+tknSvc --> ctrl : tokenDTO
+deactivate tknSvc
+activate ctrl 
+
+ctrl -> staffSvc : GetLatestVersion(user)
+deactivate ctrl
+activate staffSvc
+
+staffSvc -> staffRepo : GetStaffByUser(user)
+deactivate staffSvc
+activate staffRepo
+
+staffRepo --> staffSvc : staff
+deactivate staffRepo
+activate staffSvc
+
+staffSvc --> ctrl : staff
+deactivate staffSvc
+activate ctrl
+
+alt password matches staff password
+	ctrl -> staffSvc : UpdateVersion(staff, logID, tokenID)
+	deactivate ctrl
+	activate staffSvc
+
+	staffSvc -> logsRepo : GetByIdAsync(logID)
+	deactivate staffSvc
+	activate logsRepo
+
+	logsRepo --> staffSvc : logInformation
+	deactivate logsRepo
+	activate staffSvc
+
+	staffSvc -> staffRepo : GetStaffByLicense(loggedLicenseNumber)
+	deactivate staffSvc
+	activate staffRepo
+
+	staffRepo --> staffSvc : oldStaffInformation
+	deactivate staffRepo
+	activate staffSvc
+
+	staffSvc -> LogsBuilder** : create()
+
+	staffSvc -> LogsBuilder : updateLogsWithData(oldStaffInformation)
+	deactivate staffSvc
+	activate LogsBuilder
+
+	LogsBuilder --> staffSvc : log
+	deactivate LogsBuilder
+	activate staffSvc
+
+	staffSvc -> logsRepo : AddAsync(log)
+	staffSvc -> contactRepo : Remove(loggedContactInformation)
+
+	staffSvc -> specRepo : GetByIdAsync(specialization)
+	deactivate staffSvc
+	activate specRepo 
+
+	specRepo --> staffSvc : specialization
+	deactivate specRepo
+	activate staffSvc
+
+	staffSvc -> staff : changeSpecialization(specialization)
+	activate staff
+	staff --> staffSvc : 
+	deactivate staff
+
+	loop for each Availability in newStaffDTO 
+		staffSvc -> avalRepo : GetAvailabilitySlots(staffLicense, time);
+		deactivate staffSvc
+		activate avalRepo
+
+		avalRepo --> staffSvc : AvailabilitySlot
+		deactivate avalRepo
+		activate staffSvc
+
+		alt AvailabilitySlot doesn't exist
+			staffSvc -> avalRepo : AddAsync(Availability)
+			deactivate staffSvc
+			activate avalRepo 
+
+			avalRepo --> staffSvc :
+			deactivate avalRepo
+			activate staffSvc
+
+			staffSvc -> staff : AddAvailabilitySlot(Availability)
+			deactivate staffSvc
+			activate staff
+
+			staff --> staffSvc :
+			deactivate staff
+			activate staffSvc
+		else AvailabilitySlot exists
+			staffSvc -> staff : AddAvailabilitySlot(AvailabilitySlot)
+			deactivate staffSvc
+			activate staff
+
+			staff --> staffSvc :
+			deactivate staff
+			activate staffSvc
+		end
+	end
+end
+
+staffSvc -> tknRepo : Remove(token)
+deactivate staffSvc
+activate tknRepo
+
+tknRepo --> staffSvc :
+activate staffSvc
+deactivate tknRepo
+
+staffSvc -> staffRepo : Update(staff)
+deactivate staffSvc
+activate staffRepo
+
+staffRepo --> staffSvc :
+deactivate staffRepo
+activate staffSvc
+
+staffSvc -> ctrl : staffDTO
+deactivate staffSvc
+activate ctrl
+
+ctrl --> route : staffDTO 
+deactivate ctrl
+activate route 
+
+<-- route : staffDTO
+deactivate route
+
+@enduml

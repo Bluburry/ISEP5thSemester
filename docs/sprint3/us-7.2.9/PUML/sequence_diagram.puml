@@ -1,0 +1,112 @@
+@startuml
+
+participant Routing as route
+participant AppointmentController as ctrl
+participant AppointmentService as apptSvc
+participant AppointmentRepository as apptRepo
+participant AssignedStaffRepository as assignedRepo
+participant Appointment as appt
+participant LogsBuilder
+participant StaffRepository as staffRepo
+participant LogsRepository as logsRepo
+participant SpecializationRepository as specRepo
+participant AvailabilitySlotsRepository as avalRepo
+
+-> route : PATCH(ID, dateAndTime, staffIDs, operationRoom, auth)
+activate route
+route -> ctrl : UpdateAppointment(ID, dateAndTime, staffIDs, operationRoom, auth)
+deactivate route
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> apptSvc : UpdateSurgeryAppointment(ID, dateAndTime, staffIDs, operationRoom)
+deactivate ctrl
+activate apptSvc
+
+apptSvc -> apptRepo : GetAppointmentByID(ID)
+deactivate apptSvc
+activate apptRepo
+
+apptRepo --> apptSvc : appointment
+deactivate apptRepo
+activate apptSvc
+
+loop for each assigned staff
+	apptSvc -> assignedRepo : GetByIDAsync(assignedStaffID)
+	deactivate apptSvc
+	activate assignedRepo
+
+	assignedRepo -> apptSvc : assignedStaff
+	deactivate assignedRepo
+	activate apptSvc
+
+	apptSvc -> assignedRepo : Remove(assignedStaff)
+end
+
+loop for each staffID in staffIDs
+	apptSvc -> staffRepo : GetStaffByLicense(staffID)
+	deactivate apptSvc
+	activate staffRepo
+
+	staffRepo -> apptSvc : staff
+	deactivate staffRepo
+	activate apptSvc
+
+	apptSvc -> assignedRepo : Add(staff, appointment)
+	deactivate apptSvc
+	activate assignedRepo
+
+	assignedRepo -> apptSvc : staff
+	deactivate assignedRepo
+	activate apptSvc
+
+	apptSvc -> assignedRepo : Remove(staff)
+end
+
+apptSvc -> appt : ChangeTeam(staff)
+deactivate apptSvc 
+activate appt
+
+appt --> apptSvc
+deactivate appt 
+activate apptSvc
+
+apptSvc -> appt : ChangeDate(dateAndTime)
+deactivate apptSvc 
+activate appt
+
+appt --> apptSvc
+deactivate appt 
+activate apptSvc
+
+apptSvc -> appt : ChangeRoom(operationRoom)
+deactivate apptSvc 
+activate appt
+
+appt --> apptSvc
+deactivate appt 
+activate apptSvc
+
+apptSvc -> apptRepo : Update(appointment)
+deactivate apptSvc
+activate apptRepo
+
+apptRepo --> apptSvc : appointment
+deactivate apptRepo
+activate apptSvc
+
+apptSvc --> ctrl : appointmentDto
+deactivate apptSvc
+activate ctrl
+
+ctrl --> route : appointmentDto 
+deactivate ctrl
+activate route 
+
+<-- route : appointmentDto
+deactivate route
+
+@enduml

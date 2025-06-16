@@ -1,0 +1,59 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant Routing as route
+participant PatientController as ctrl
+participant PatientService as svc
+participant PatientRepository as patRepo
+participant LoggingService as logSvc
+
+-> route : POST(deletePatientInfoDto)
+
+activate route
+route -> ctrl : DeletePatientProfile(deletePatientInfoDto)
+
+
+deactivate route
+activate ctrl
+
+
+REF OVER ctrl
+REFER to GENERIC AUTH SD
+end
+ctrl -> svc : GetByIdAsync(id)
+deactivate ctrl
+activate svc
+
+svc -> patRepo : GetByIdAsync(patientId)
+deactivate svc
+activate patRepo
+
+patRepo --> svc : patient
+deactivate patRepo
+activate svc
+
+
+svc --> ctrl : patientDto
+deactivate svc
+activate ctrl
+
+
+
+ctrl -> logSvc : logPatientDeletion(patientDto)
+deactivate ctrl
+activate logSvc
+ref over logSvc
+See Generic SD-Logging-Flow
+end ref
+logSvc --> ctrl
+deactivate logSvc
+activate ctrl
+
+ctrl --> route : Ok(patientDto)
+deactivate ctrl
+
+activate route
+<-- route : Ok(operationDto)
+deactivate route
+@enduml

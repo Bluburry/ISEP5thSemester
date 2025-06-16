@@ -1,0 +1,37 @@
+@startuml
+
+participant Routing as route
+participant GenericController as ctrl
+participant TokenService
+participant TokenRepository as tokenRepo
+
+
+activate ctrl
+
+ctrl -> TokenService : GetByIdAsync(authToken)
+deactivate ctrl
+activate TokenService
+
+TokenService -> tokenRepo : GetByIdAsync(authToken)
+deactivate TokenService
+activate tokenRepo
+
+tokenRepo --> TokenService : token
+deactivate tokenRepo
+activate TokenService
+
+TokenService -> TokenDTO** : create()
+TokenService --> ctrl : tokenDto
+deactivate TokenService
+activate ctrl
+
+alt if TOKEN DOES NOT AUTHENTICATE X
+ctrl --> route : BadRequest
+activate route
+<-- route : deactivate route
+deactivate route
+end
+
+
+
+@enduml

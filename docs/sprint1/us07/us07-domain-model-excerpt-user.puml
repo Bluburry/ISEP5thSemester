@@ -1,0 +1,21 @@
+@startuml
+
+Package UserAggregate {
+    Entity User <<(V,#0000FF) Root Entity>>{}
+
+    Class ActivationStatus  <<(V,#f04800) Value Object>> {}
+    Class Username <<(V,#f09800) Unique Identifier>> {}
+    Enum UserRole <<(V,#f04800) Value Object>> {}
+    Class EmailAddress <<(V,#f04800) Value Object>> {}
+    Class Password <<(V,#f04800) Value Object>> {}
+
+     ActivationStatus "1" -* "1" User
+
+    Username "1" --* "1" User
+    UserRole "1" --* "1" User
+    EmailAddress "1" --* "1" User
+    Password "1" --> "1" User
+}
+
+
+@enduml

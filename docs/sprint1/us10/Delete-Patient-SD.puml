@@ -1,0 +1,89 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+participant LegalDeletionCheckService as lSvc
+participant LogRepo as logSvc
+participant PatientRepo as patSvc
+participant UserRepo as userSvc
+participant UnitOfWork as uow
+
+-> lSvc
+
+loop WHILE SYSTEM RUNS
+activate lSvc
+lSvc -> logSvc : GetAllAsync()
+deactivate lSvc
+
+activate logSvc
+logSvc --> lSvc : logs
+deactivate logSvc
+
+activate lSvc
+
+LOOP FOR EVERY DELETION LOG
+alt IF DELETION GRACE PERIOD HAS EXPIRED
+
+lSvc -> patSvc : GetByIdAsync(medicalRecordNumber)
+deactivate lSvc
+activate patSvc
+
+patSvc --> lSvc : patient
+deactivate patSvc
+
+activate lSvc
+lSvc -> userSvc : GetByIdAsync(patient.userId)
+deactivate lSvc
+activate userSvc
+
+userSvc --> lSvc : user
+deactivate userSvc
+
+activate lSvc
+lSvc -> patSvc : Update(patient)
+deactivate lSvc
+activate patSvc
+patSvc --> lSvc : patient
+deactivate patSvc
+
+activate lSvc
+lSvc -> userSvc : Remove(user)
+deactivate lSvc
+activate userSvc
+userSvc --> lSvc
+deactivate userSvc
+
+activate lSvc
+lSvc -> logSvc : Remove(log)
+deactivate lSvc
+activate logSvc
+logSvc --> lSvc
+deactivate logSvc
+
+loop FOR EVERY LOG TO CHECK DUPLICATES
+activate lSvc
+lSvc -> logSvc : Remove(check)
+deactivate lSvc
+activate logSvc
+logSvc --> lSvc
+deactivate logSvc
+activate lSvc
+end
+
+activate lSvc
+lSvc -> uow : CommitAsync()
+deactivate lSvc
+activate uow
+
+uow --> lSvc
+activate lSvc
+deactivate uow
+note left of lSvc
+  The system repeats this process every 30 minutes
+  until the service is stopped or system shuts down.
+end note
+
+end
+end LOOP
+
+END LOOP
+@enduml

@@ -1,0 +1,23 @@
+@startuml US18_SSD
+
+title System Sequence Diagram - US 18
+
+actor "Admin" as adm
+participant "System" as app
+
+activate adm
+
+adm -> app : delete operation request
+
+activate app
+app --> admn : request id
+deactivate admn
+
+admn -> app : inputs requested info
+activate app
+app --> admn : confirms deletion
+deactivate admn
+
+deactivate adm
+
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+
+Actor Admin as act
+Participant System as sys
+
+activate act
+
+act -> sys : selects patient profile
+deactivate act
+activate sys
+
+
+
+
+sys --> act : requests new information
+deactivate sys
+activate act
+
+act -> sys : introduces new information
+deactivate act
+activate sys
+
+sys --> act : shows updated profile
+deactivate sys
+activate act
+
+
+
+
+@enduml

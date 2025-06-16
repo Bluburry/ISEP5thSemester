@@ -1,0 +1,111 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant Routing as route
+participant PatientController as ctrl
+participant PatientService as svc
+participant PatientDto as dto
+participant PatientBuilder as patBuilder
+participant PatientRepository as patRepo
+participant EmailService as emailSvc
+participant LoggingService as logSvc
+
+-> route : POST(editPatientInfoDto)
+
+activate route
+    route -> ctrl : EditPatientProfilePatient(editPatientInfoDto,\n authToken)
+deactivate route
+
+activate ctrl
+    note right ctrl
+    **Token Authentication Process** to 
+    validate the user permissions 
+    end note
+    ctrl -> svc : EditPatientProfilePatient(editPatientInfoDto, authToken)
+deactivate ctrl
+
+activate svc
+    svc -> patRepo : GetByUserIdAsync(authToken.userId)
+deactivate svc
+
+activate patRepo
+    patRepo --> svc: patient
+deactivate patRepo
+
+activate svc
+    svc -> patBuilder** : create(patient)
+    svc -> patBuilder : updatePatientWithData(editPatientInfoDto)
+deactivate svc
+
+activate patBuilder
+    patBuilder --> svc : patient
+deactivate patBuilder
+
+activate svc
+    svc -> dto** : create()
+alt if any sensitive information was altered 
+    svc -> TokenService : generateUpdateConfirmationToken(authToken.userId)
+deactivate svc
+activate TokenService
+    TokenService --> svc : tokenDto
+deactivate TokenService
+activate svc
+    svc -> emailSvc : sendPatientUpdateNotification(emailAddress, tokenDTO, patientDTO)
+deactivate svc
+
+activate emailSvc
+    emailSvc --> svc : opResult
+deactivate emailSvc
+
+activate svc
+
+note left
+Ends process to wait 
+for e-mail confirmation
+end note
+
+else if non sensitive information was altered
+    svc -> patRepo : update(patient)
+deactivate svc
+
+activate patRepo
+    patRepo --> svc : patient
+deactivate patRepo
+
+activate svc
+end 
+    svc --> ctrl : patientDto
+deactivate svc
+activate ctrl
+    alt If any sensitive information was altered 
+    ctrl -> logSvc : logPatientEditingAttempt(patientDto, authToken.userId)
+deactivate ctrl
+
+activate logSvc
+    ref over logSvc
+        See Generic SD-Logging-Flow
+    end ref
+    logSvc --> ctrl :
+deactivate logSvc
+
+activate ctrl
+else 
+    ctrl -> logSvc : logPatientEditing(patientDto)
+deactivate ctrl
+
+activate logSvc
+    ref over logSvc
+        See Generic SD-Logging-Flow
+    end ref
+    logSvc --> ctrl :
+deactivate logSvc
+
+activate ctrl
+end
+    ctrl --> route : opperationSuccess
+deactivate ctrl
+activate route
+<-- route : opperationSuccess
+deactivate route
+@enduml

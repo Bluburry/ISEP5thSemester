@@ -1,0 +1,81 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant Routing as route
+participant LoginController as ctrl
+participant LoginCredentialsDto
+participant LoginService as logSvc
+participant LoginOutputDto as logDto
+participant TokenService as tokenSvc
+
+participant UserRepository as userRepo
+
+-> route : POST(LoginIAMInfoDto)
+
+activate route
+    route -> ctrl: loginIAM()
+deactivate route
+
+activate ctrl
+    ctrl --> ctrl : **[Gets Google Response Information]** 
+    ctrl -> LoginCredentialsDto** : create()
+    ctrl -> logSvc : TreatAuthenticateResult(claims)
+deactivate ctrl
+activate logSvc
+    logSvc --> ctrl : loginCredentials
+deactivate logSvc
+activate ctrl
+    ctrl -> logSvc : login(loginCredentials)
+deactivate ctrl
+
+activate logSvc
+    logSvc -> userRepo : getByIdAsync(username)
+deactivate logSvc
+
+activate userRepo
+userRepo --> logSvc : user
+deactivate userRepo
+
+activate logSvc
+    logSvc -> logSvc : passwordMatches(user, password)
+    activate logSvc
+        logSvc --> logSvc : opResult
+    deactivate logSvc
+    logSvc -> logDto** : create()
+    logSvc --> ctrl : loginOutputDto
+deactivate logSvc
+
+activate ctrl
+    ctrl -> tokenSvc : CreateAuthToken(LoginCredentialsDto)
+deactivate ctrl
+
+activate tokenSvc
+    tokenSvc -> userRepo : getByIdAsync(username)
+deactivate tokenSvc
+
+activate userRepo
+    userRepo --> tokenSvc : user
+deactivate userRepo
+
+activate tokenSvc
+    tokenSvc --> TokenDto** : create()
+    tokenSvc --> ctrl : tokenDto
+    note left ctrl
+        Dto containing login output is
+        populated with the token here
+        otherwise that field is empty
+    end note   
+deactivate tokenSvc
+
+activate ctrl
+    ctrl -> route : loginOutputDto
+deactivate ctrl
+
+activate route
+    <-- route : loginOutputDto
+deactivate route
+
+
+@enduml

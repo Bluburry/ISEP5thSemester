@@ -1,0 +1,32 @@
+@startuml
+
+actor User as usr
+participant Frontend as front
+participant Backend as back
+
+activate usr
+
+usr -> front : perform operation
+deactivate usr
+activate front
+
+
+front -> back : http/s
+note right back
+Backend will receive the
+HTTP request and perform
+logic operations
+end note
+deactivate front
+activate back
+
+back --> front : http/s
+deactivate back
+
+activate front
+front --> usr : displays operation result
+deactivate front
+activate usr
+
+
+@enduml

@@ -1,0 +1,88 @@
+@startuml
+
+participant Routing as route
+participant OperationRequestController as ctrl
+participant OperationRequestService as docSvc
+participant OperationRequestBuilder as builder
+participant StaffRepository as staffRepo
+participant DoctorRepository as docRepo
+participant PatientRepository as patRepo
+participant OperationTypeRepository as opRepo
+participant OperationRequestRepository as reqRepo
+
+-> route : PUT(patientID, doctorID, operationType, deadline, priority, auth)
+activate route
+
+route -> ctrl : CreateOperationRequest(patientID, operationType, deadline, priority, token)
+deactivate route
+activate ctrl
+
+REF OVER ctrl
+	Refer to generic auth SD
+end ref
+
+ctrl -> docSvc : CreateRequest(patientID, operationType, deadline, priority, token)
+deactivate ctrl
+activate docSvc
+
+docSvc -> staffRepo : GetStaffByUser(user)
+deactivate docSvc  
+activate staffRepo
+
+staffRepo --> docSvc : staff
+deactivate staffRepo
+activate docSvc
+
+docSvc -> docRepo : GetDoctorByLicenseNumber(staff)
+deactivate docSvc
+activate docRepo
+
+docRepo --> docSvc : doctor
+deactivate docRepo
+activate docSvc
+
+docSvc -> patRepo : GetByIdAsync(patientID)
+deactivate docSvc
+activate patRepo
+
+patRepo --> docSvc : patient
+deactivate patRepo
+activate docSvc
+
+docSvc -> opRepo : GetByIdAsync(operationType)
+deactivate docSvc
+activate opRepo
+
+opRepo --> docSvc : type 
+deactivate opRepo
+activate docSvc
+
+docSvc -> builder** : create()
+docSvc -> builder : updateOperationRequestWithData(patient, doctor, type, priority, deadline)
+deactivate docSvc
+activate builder
+
+builder --> docSvc : operationRequest
+deactivate builder
+activate docSvc
+
+docSvc -> reqRepo : AddAsync(operationRequest)
+deactivate docSvc 
+activate reqRepo
+
+reqRepo --> docSvc : operationRequestDTO
+deactivate reqRepo
+activate docSvc
+
+docSvc --> ctrl : operationRequestDTO
+deactivate docSvc
+activate ctrl
+
+ctrl --> route : operationRequestDTO
+deactivate ctrl
+activate route
+
+<-- route : operationRequestDTO
+deactivate route 
+
+@enduml

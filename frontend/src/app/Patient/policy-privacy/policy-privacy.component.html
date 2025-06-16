@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Patient Panel</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap');
+        body {
+			padding: 0;
+			margin: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #003366;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px;
+			background-color: #28a745;
+			color: white;
+			border-bottom: 3px solid #218838;
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.user-info {
+			display: flex;
+			flex-direction: column;
+			text-align: left;
+		}
+
+		.user-info .user-name {
+			font-size: 1.5em;
+			font-weight: bold;
+		}
+
+		.user-info .user-role {
+			font-size: 1em;
+			margin-top: 5px;
+		}
+
+		.header img {
+			max-height: 60px;
+		}
+
+		.logOut {
+			background-color: white;
+			color: #28a745;
+			border: 1px darkgreen;
+			padding: 10px 15px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			font-size: 1em;
+			border-radius: 12px;
+		}
+
+		.logOut:hover {
+			background-color: #ffb1b1;
+			color: #b20000;
+			box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+		}
+
+		.main-content {
+			flex: 1;
+			background-color: #ffffff;
+			border-radius: 8px;
+			padding: 20px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.details-box {
+			margin-bottom: 15px;
+			padding: 8px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			background-color: #f9f9f9;
+			font-size: 14px;
+			color: #333;
+		}
+
+		.details-box label {
+			font-weight: bold;
+			display: block;
+			margin-bottom: 5px;
+		}
+
+		.details-box span {
+			display: block;
+		}
+
+		.action-panel {
+			width: 300px;
+			background-color: #ffffff;
+			border-radius: 8px;
+			padding: 20px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+			text-align: center;
+		}
+
+		.action-header {
+			font-size: 1.5em;
+			font-weight: bold;
+			margin-bottom: 20px;
+			color: #333;
+		}
+
+		.button-group {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
+
+		.button-group button {
+			padding: 10px 20px;
+			font-size: 1em;
+			font-weight: bold;
+			border-radius: 18px;
+			border: 1px darkgreen solid;
+			background-color: #4CAF50;
+			color: white;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.button-group button:hover {
+			background-color: #0f5712;
+			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+			scale: 110%;
+		}
+
+		.button-group button:focus {
+			outline: none;
+			box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="header">
+		<button class="logOut" (click)="navigateToPanel()">Return</button>
+	</div>
+    <div class="content">
+        <h1>Privacy Policy - Hospital Group 37</h1>
+        <h2>1. Compliance with GDPR Regulations</h2>
+        <p>The team promises to comply with GDPR regulations when handling patient data. Article 5 of the GDPR sets out all the principles relating to the processing of personal data, which must be processed “lawfully, fairly and transparently.”</p>
+        <ul>
+            <li><strong>Purpose Limitation:</strong> Data is only collected to the extent necessary and for a specific purpose (and cannot be processed for other purposes unless clarified with the client).</li>
+            <li><strong>Data Minimization:</strong> Only necessary data should be collected, ensuring it serves the purpose of the consultation.</li>
+            <li><strong>Accuracy:</strong> A method must be provided to ensure the data remains current and accurate.</li>
+            <li><strong>Storage Limitation:</strong> Data should be retained for as long as necessary for treatment and archived after discharge.</li>
+            <li><strong>Integrity and Confidentiality:</strong> Data should be processed securely and confidentially, with clear responsibility for safeguarding it.</li>
+            <li><strong>Accountability:</strong> The responsible individual must take full responsibility for the data.</li>
+        </ul>
+
+        <h3>Data Processing Principles</h3>
+        <p>The core principles guiding data processing include purpose limitation, data minimization, accuracy, storage limitation, integrity, and confidentiality. These principles ensure that personal data is only processed as needed, accurately, and securely.</p>
+
+        <h3>Data Security</h3>
+        <p>Security obligations for controllers and processors are emphasized. Measures must ensure data confidentiality, integrity, and resilience of processing systems. Regular testing and assessment of security measures are recommended to prevent unauthorized access, data loss, or alteration.</p>
+
+        <h3>Data Controller Responsibilities</h3>
+        <p>The Data Controller has the general obligation (as defined in the GDPR, Chapter 4, Articles 24 to 31) to analyze the data collected on a case-by-case basis. This ensures that data is processed appropriately and updated according to changing laws. The controller is also responsible for ensuring data protection by design and by default, when necessary, and cooperating with the supervisory authority.</p>
+
+        <h3>Security of Personal Data</h3>
+        <p>Section 2 of the GDPR outlines the procedures to guarantee data confidentiality, access, and the reporting of irregularities. If data leaks are detected, authorities must be notified, and supervision must be conducted to prevent breaches.</p>
+
+        <h3>Accountability and Compliance</h3>
+        <p>Controllers must demonstrate compliance with the GDPR, implementing appropriate technical and organizational measures. Detailed records of processing activities should be maintained.</p>
+
+        <h3>Data Protection Officer</h3>
+        <p>A Data Protection Officer (DPO) will be appointed, with the expertise required to monitor compliance with the GDPR and provide advice. The DPO will act as a contact point with the supervisory authority.</p>
+
+        <h2>2. Data Subject Rights</h2>
+        <p>Individuals have clear rights, including the right to access, rectify, and delete their personal data. Data subjects must be informed about data processing activities in a transparent manner.</p>
+
+        <h3>Risk Assessment and Mitigation</h3>
+        <p>The GDPR encourages the use of data protection impact assessments, especially for high-risk processing activities, to proactively identify and mitigate potential risks to data protection.</p>
+    
+		<h1>Data Collection and Processing Policy</h1>
+
+        <h2>2.1. Data Collected and Purpose</h2>
+        <h3>Patient Sensitive Data</h3>
+        <p>Patient-sensitive data refers to uniquely identifying information about any user of the platform. Specifically, this is defined under Article 4, Section 1 of the Official EU GDPR Law as:</p>
+        <blockquote>
+            <p><strong>“Personal data” refers to information relating to an identified or identifiable natural person (“data subject”). A natural person is considered identifiable if they can be identified, directly or indirectly, particularly by reference to an identifier such as a name, identification number, location data, electronic identifiers, or one or more specific elements of their physical, physiological, genetic, mental, economic, cultural, or social identity.</strong></p>
+        </blockquote>
+
+        <h2>2.2. Retention of Personal Data</h2>
+        <p>Articles 17, 23, and 30 of the Official EU GDPR Law state that personal data should only be retained for as long as necessary to fulfill the purpose for which it was collected. After the purpose has been completed, the data should be deleted. If the data subject withdraws consent or exercises their right to erasure, the data controller must ensure its removal. The data controllers are responsible for determining appropriate retention periods based on the nature and purpose of the data processing, ensuring compliance with data minimization and purpose limitation principles.</p>
+        <p>The following guidelines were decided upon after discussions with the team:</p>
+        <ul>
+            <li>When deleting a user from the system, their data must be either completely removed or anonymized to the extent that it cannot be recognized.</li>
+            <li>If a deletion request is made by a user, the team is legally allowed to withhold the user’s information for a period of at least 4 weeks (28 days) before deletion to prevent critical system disruptions.</li>
+        </ul>
+
+        <h2>2.3. Lawful Bases for Processing Personal Data</h2>
+        <p>According to Article 6 of the GDPR, processing personal data is lawful only if:</p>
+        <ul>
+            <li>The person has given their consent, and the processing is explained in an informed manner, detailing the purpose, type, and form of processing that their data will be subject to.</li>
+            <li>The processing is explicitly necessary (e.g., by legal order or for the exercise of public functions).</li>
+        </ul>
+        <p>The processing of personal data must not violate the citizen’s right to refuse. Data subjects must have the ability to opt out and exercise control over their personal data.</p>
+
+		<h1>User Rights and Complaints</h1>
+
+        <h2>3.1. User Rights</h2>
+        <p>Here are some examples of the rights of each citizen to access their data. The provisions of the GDPR will be outlined later. Every individual has the right to access their information, whether they request it directly or, if they are incapacitated, by the person responsible for them. In addition to this, people/customers have other rights, such as:</p>
+        <ul>
+            <li>The right to clear and informed information about their medical conditions, medical reports, and any tests carried out when requested.</li>
+            <li>The right to refuse providing certain data due to personal, cultural, or religious characteristics during data collection.</li>
+            <li>When there is a refusal to fill in data considered fundamental, a statement of justification and accountability from the individual must be safeguarded with the legal department.</li>
+        </ul>
+
+        <p>Specific situations also require special attention when processing data, such as when clients are minors, to verify who holds guardianship, and in cases of children/adoption processes. In these cases, a solicitor or an EMAT team (multidisciplinary court support team) should be involved to protect the child’s interests, or social services (the equivalent of the CPCJ – Commission for the Protection of Children and Young People at Risk). These and other situations are addressed in Article 23 of the GDPR.</p>
+
+        <p>According to the GDPR, it is important to safeguard customer rights. The key sections are as follows:</p>
+        <h3>Section 1 - Transparency and Modalities</h3>
+        <ul>
+            <li>Article 12 - Transparent information, communication, and modalities for the exercise of the rights of the data subject.</li>
+        </ul>
+
+        <h3>Section 2 - Information and Access to Personal Data</h3>
+        <ul>
+            <li>Article 13 - Information to be provided where personal data are collected from the data subject.</li>
+            <li>Article 14 - Information to be provided where personal data have not been obtained from the data subject.</li>
+            <li>Article 15 - Right of access by the data subject.</li>
+        </ul>
+
+        <h3>Section 3 - Rectification and Erasure</h3>
+        <ul>
+            <li>Article 16 - Right to rectification.</li>
+            <li>Article 17 - Right to erasure (‘right to be forgotten’).</li>
+            <li>Article 18 - Right to restriction of processing.</li>
+            <li>Article 19 - Notification obligation regarding rectification or erasure of personal data or restriction of processing.</li>
+            <li>Article 20 - Right to data portability.</li>
+        </ul>
+
+        <h3>Section 4 - Right to Object and Automated Individual Decision-Making</h3>
+        <ul>
+            <li>Article 21 - Right to object.</li>
+            <li>Article 22 - Automated individual decision-making, including profiling.</li>
+        </ul>
+
+        <h2>3.2. Complaints</h2>
+        <p>There is also a provision for a complaints book, which can be online. A specific department must be designated to handle these complaints. Chapter 8 (Remedies, Liability, and Penalties) of the GDPR, between Articles 77 and 84, sets forth certain conditions to be met in the event of a complaint. These include:</p>
+        <ul>
+            <li>Article 77 - Right to lodge a complaint with a supervisory authority.</li>
+            <li>Article 78 - Right to an effective judicial remedy against a supervisory authority.</li>
+            <li>Article 79 - Right to an effective judicial remedy against a controller or processor.</li>
+            <li>Article 80 - Representation of data subjects.</li>
+            <li>Article 81 - Suspension of proceedings.</li>
+            <li>Article 82 - Right to compensation and liability.</li>
+            <li>Article 83 - General conditions for imposing administrative fines.</li>
+            <li>Article 84 - Penalties.</li>
+        </ul>
+	</div>
+
+</body>
+
+</html>

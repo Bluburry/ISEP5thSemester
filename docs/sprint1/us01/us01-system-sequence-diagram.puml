@@ -1,0 +1,28 @@
+@startuml
+
+Actor Admin as act 
+Participant System as sys
+
+activate act
+
+act -> sys : requests user creation
+deactivate act
+activate sys
+
+sys --> act : requests information
+
+deactivate sys
+activate act
+
+act -> sys : inputs requested information
+deactivate act
+activate sys
+
+sys --> act : success information message
+deactivate sys
+activate act
+
+
+
+
+@enduml

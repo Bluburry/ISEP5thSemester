@@ -1,0 +1,42 @@
+@startuml
+
+Actor Admin as act
+Participant System as sys
+
+activate act
+
+act -> sys : requests to delete patient profile
+deactivate act
+activate sys
+
+
+
+
+sys --> act : shows user profiles
+deactivate sys
+activate act
+
+loop while admin does not confirm choice
+act -> sys : selects patient profile
+deactivate act
+activate sys
+
+
+
+
+sys --> act : requests confirmation
+deactivate sys
+activate act
+end loop
+act -> sys : inputs decision
+deactivate act
+activate sys
+
+sys --> act : shows updated list of patients
+deactivate sys
+activate act
+
+
+
+
+@enduml

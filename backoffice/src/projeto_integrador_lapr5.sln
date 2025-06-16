@@ -1,0 +1,27 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDNetCore", "DDDNetCore.csproj", "{23AA6C8E-D620-42F3-89E4-B76BCABFADDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDNetCore.test", "..\test\DDDNetCore.test.csproj", "{862F79D4-20FF-4F2D-9A7D-4F0748D1775D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23AA6C8E-D620-42F3-89E4-B76BCABFADDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23AA6C8E-D620-42F3-89E4-B76BCABFADDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23AA6C8E-D620-42F3-89E4-B76BCABFADDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23AA6C8E-D620-42F3-89E4-B76BCABFADDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{862F79D4-20FF-4F2D-9A7D-4F0748D1775D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862F79D4-20FF-4F2D-9A7D-4F0748D1775D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862F79D4-20FF-4F2D-9A7D-4F0748D1775D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862F79D4-20FF-4F2D-9A7D-4F0748D1775D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

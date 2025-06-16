@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor Patient
+Participant System
+
+activate Patient
+
+Patient -> System : requests to see own information
+deactivate Patient
+activate System
+
+System --> Patient : displays patient medical record
+deactivate System
+activate Patient
+
+@enduml

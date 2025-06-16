@@ -1,0 +1,24 @@
+@startuml
+
+Actor Patient as act
+Participant System as sys
+
+activate act
+    act -> sys : wants to edit their's patient profile
+deactivate act
+
+activate sys
+    sys --> act : requests the information to update
+deactivate sys
+
+activate act
+    act -> sys : introduces the information to update
+deactivate act
+
+activate sys
+    sys --> act : shows updated profile
+deactivate sys
+
+activate act
+
+@enduml

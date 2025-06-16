@@ -1,0 +1,61 @@
+@startuml
+
+participant Routing as route
+participant FilteredPatientListingController as ctrl
+participant PatientService as usrSvc
+participant PatientDto
+participant TokenService
+participant TokenDto as TokenDTO
+participant TokenRepository as tokenRepo
+participant PatientRepository as usrRepo
+
+
+-> route : GET(queryDataDto, authToken)
+
+activate route
+
+
+
+route -> ctrl : GET (queryDataDto, authToken)
+
+deactivate route
+activate ctrl
+ref over ctrl
+REFER TO GENERIC AUTH SD
+end
+ctrl -> usrSvc : getFilteredPatients(queryDataDto)
+
+deactivate ctrl
+activate usrSvc
+
+usrSvc -> usrRepo : getFilterPatients(queryDataDto)
+
+deactivate usrSvc
+activate usrRepo
+
+usrRepo --> usrSvc : Patients
+
+deactivate usrRepo
+activate usrSvc
+
+loop for every Patient in Patients
+usrSvc -> PatientDto** : create()
+end loop
+
+usrSvc --> ctrl : PatientDtos
+
+deactivate usrSvc
+
+activate ctrl
+
+ctrl -> route : PatientDtos
+
+deactivate ctrl
+
+activate route
+
+<-- route : PatientDtos
+
+deactivate route
+
+@enduml

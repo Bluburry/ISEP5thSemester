@@ -1,0 +1,24 @@
+@startuml
+
+Actor Admin as act 
+Participant System as sys
+
+activate act
+act -> sys : requests patient profile creation
+deactivate act 
+
+activate sys
+sys --> act : request the patient information
+deactivate sys
+
+activate act
+act -> sys : provides requested information
+deactivate act
+
+activate sys
+sys --> act : success information message
+deactivate sys
+
+activate act
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml US17_SSD
+
+title System Sequence Diagram - US 17
+
+actor "Admin" as adm
+participant "System" as app
+
+activate adm
+
+adm -> app : update operation request
+
+activate app
+app --> admn : request changes
+deactivate admn
+
+admn -> app : inputs requested info
+activate app
+app --> admn : confirms changes
+deactivate admn
+
+deactivate adm
+
+@enduml

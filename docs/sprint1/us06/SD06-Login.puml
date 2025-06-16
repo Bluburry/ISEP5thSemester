@@ -1,0 +1,163 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant Routing as route
+participant LoginController as ctrl
+participant LoginService as logSvc
+participant UserService as usrSvc
+participant UserDto as usrDto
+participant LoginOutputDto as logDto
+participant TokenService as tokenSvc
+
+participant UserRepository as userRepo
+participant TokenRepository as tokenRepo
+participant UserLoginAttemptRepository as logRepo
+
+-> route : POST(LoginCredentialsDto)
+
+deactivate user
+activate route
+
+route -> ctrl: login(LoginCredentialsDto)
+
+deactivate route
+activate ctrl
+
+ctrl -> logSvc : login(LoginCredentialsDto)
+
+deactivate ctrl
+
+activate logSvc
+
+logSvc -> userRepo : getByIdAsync(username)
+deactivate logSvc
+activate userRepo
+
+userRepo --> logSvc : user
+
+deactivate userRepo
+activate logSvc
+
+
+
+
+logSvc -> logSvc : passwordMatches(user, password)
+activate logSvc
+
+logSvc --> logSvc : opResult
+deactivate logSvc
+
+
+logSvc --> logRepo : GetLoginAttemptsOfUser(username)
+deactivate logSvc
+activate logRepo
+
+logRepo --> logSvc : loginAttempts
+
+
+deactivate logRepo
+activate logSvc
+
+
+
+
+logSvc --> logRepo : addAsync(updatedFailedLoginAttempts)
+note right logRepo
+If the login was SUCCESSFUL the failed attempts are set to 0.
+If the login was UNSUCCESSFUL the failed attempts are incremented by 1.
+If the login limit was BREACHED the failed attempts are set to 0
+end note
+deactivate logSvc
+activate logRepo
+
+logRepo --> logSvc : loginAttempts
+deactivate logRepo
+activate logSvc
+
+logSvc -> logDto** : create()
+
+logSvc --> ctrl : loginOutputDto
+deactivate logSvc
+activate ctrl
+
+
+alt if LOGIN ATTEMPTS SURPASSES MAXIMUM
+
+ctrl -> usrSvc
+deactivate ctrl
+activate usrSvc
+
+usrSvc -> userRepo : getByIdAsync(username)
+deactivate usrSvc
+activate userRepo
+
+userRepo --> usrSvc : user
+
+deactivate userRepo
+activate usrSvc
+
+
+usrSvc -> userRepo : addAsync(updatedUser)
+deactivate usrSvc
+activate userRepo
+
+note right userRepo
+The User's activation status is
+changed to DEACTIVATED
+end note
+userRepo --> usrSvc : user
+deactivate userRepo
+activate usrSvc
+
+usrSvc -> usrDto** : create()
+
+
+usrSvc --> ctrl : userDto
+deactivate usrSvc
+activate ctrl
+end alt
+
+alt IF AUTHENTICATION WAS SUCCESSFUL
+
+ctrl -> tokenSvc : CreateAuthToken(LoginCredentialsDto)
+
+deactivate ctrl
+activate tokenSvc
+
+tokenSvc -> userRepo : getByIdAsync(username)
+deactivate tokenSvc
+activate userRepo
+
+
+userRepo --> tokenSvc : user
+deactivate userRepo
+activate tokenSvc
+
+tokenSvc --> TokenDto** : create()
+
+
+
+tokenSvc --> ctrl : tokenDto
+
+note left ctrl
+dto containing login output is
+populated with the token here
+otherwise it's the field is empty
+end note
+
+deactivate tokenSvc
+activate ctrl
+
+
+end
+ctrl -> route : loginOutputDto
+deactivate ctrl
+activate route
+
+<-- route : loginOutputDto
+deactivate route
+
+
+@enduml

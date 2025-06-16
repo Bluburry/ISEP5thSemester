@@ -1,0 +1,31 @@
+@startuml
+
+Participant External_IAM_System as iam
+Actor Patient as act 
+Participant System as sys
+
+activate act
+    act -> sys : asks to login through the IAM system
+deactivate act
+
+activate sys
+    sys --> act : redirects to the IAM system
+deactivate sys
+
+activate act
+    act -> iam : logins with IAM credentials
+deactivate act 
+
+activate iam 
+    iam --> sys : sends login information
+deactivate iam
+
+activate sys
+sys --> act : shows homepage
+deactivate sys
+activate act
+
+
+
+
+@enduml

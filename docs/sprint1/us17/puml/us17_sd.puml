@@ -1,0 +1,90 @@
+@startuml US17_SD
+
+title Sequence Diagram - US 17
+
+participant Routing as rt
+participant RegisterOperationRequestController as ctrl
+participant OperationRequestService as serv
+participant OperationRequestRepository as repo
+participant StaffRepository as staffRepo
+participant DoctorRepository as docRepo
+participant LogBuilder as logBuilder
+participant OperationRequest as opReq
+participant LogRepository as logRepo
+participant OperationRequestBuilder as builder
+participant OperationRequestDTO as dto
+
+-> rt : PATCH(id, deadline, priority, authToken)
+activate rt
+
+rt -> ctrl : EditOperationRequest(id, priority, deadline, token)
+activate ctrl
+
+REF OVER ctrl
+Refer to generic auth SD
+end ref
+
+ctrl -> serv : EditRequest(id, priority, dealine, token)
+
+activate serv
+
+serv -> repo : GetRequestById(Id)
+activate repo
+repo --> serv : OperationRequest
+deactivate repo
+
+serv -> staffRepo : GetStaffByUser(Username)
+activate staffRepo
+staffRepo --> serv : Staff
+deactivate staffRepo
+
+serv -> docRepo : GetDoctorByLicenseNumber(LicenseNumber)
+activate docRepo
+docRepo --> serv : Doctor
+deactivate docRepo
+
+serv -> logBuilder** : create()
+serv -> logBuilder : Build()
+activate logBuilder
+logBuilder --> serv : log
+deactivate logBuilder
+
+alt change priority
+serv -> opReq : OperationPriority(priority)
+activate opReq
+opReq --> serv :
+deactivate opReq
+end alt
+
+alt change deadline
+serv -> opReq : Deadline(deadline)
+activate opReq
+opReq --> serv :
+deactivate opReq
+end alt
+
+serv -> logRepo : AddAsync(log)
+activate logRepo
+logRepo --> serv : log
+deactivate logRepo
+
+serv -> repo : Update(request)
+activate repo
+repo --> serv : OperationRequest
+deactivate repo
+
+serv -> dto** : Create()
+activate dto
+dto --> serv : OperationRequestDTO
+deactivate dto
+
+serv --> ctrl : OperationRequestDTO
+deactivate serv
+
+ctrl -> rt : operationResult
+deactivate ctrl
+
+<-- rt : operationResult
+deactivate rt
+
+@enduml
