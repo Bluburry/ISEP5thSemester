@@ -1,6 +1,47 @@
-# Project Planning and Technical Documentation
+# Integrating Project for the 5th Semester of LEI-ISEP 2021-22
 
-## 1. Group Members
+## 1. Project Description
+
+This project is a web-based surgical appointment and resource management system. The system consists of several modules:
+
+- Backoffice Web Application
+- 3D Visualization Module
+- Planning/Optimization Module
+- GDPR Module
+- Business Continuity Plan (BCP)
+
+The goal was to expose students to full-stack web development, REST APIs, database management, 3D rendering, optimization using Prolog, and privacy law (GDPR).
+
+They worked in groups of 4, with each group member responsible for different parts of the system. Each student was responsible for a distinct part of the system, but collaboration was essential for integrating the various components into a functional product. All user stories across the modules align, and any dependencies between modules (e.g., 3D visualization relying on scheduling data from the planning module) are carefully managed.
+
+The project ran over 14 weeks, split into three sprints. Each sprint involved developing and integrating system components while ensuring GDPR compliance and business continuity.
+
+Throughout the project, they conducted tests to ensure that all modules (backoffice, 3D visualization, planning, GDPR, and business continuity) were integrated and function correctly.
+Special attention should was given to the interaction between the 3D visualization and planning modules, ensuring that real-time updates (such as room availability) are consistent across the system.
+
+Overall, the backofffice module manages:
+
+- Medical professionals (doctors, nurses)
+- Patients
+- Operation types
+- Rooms
+- Chirurgic requests
+
+That information is feed into the planning module which:
+
+- Generate the schedule of the surgeries, i.e., appointments.
+- Optimize those schedules according to different criteria and the medical professionals and rooms availability.
+
+The 3d module renders the hospital floor.
+
+The team also considers GDPR aspects in all user stories/requirements.
+
+The team also considers failover and business continuity aspects for the system.
+
+Assume all other medical and patient management is managed in other parts of the system not part of this prototype. This prototype's scope is concerned with the appointment of surgeries.
+
+
+## 2. Group Members
 
 The members of the group:
 
@@ -11,7 +52,7 @@ The members of the group:
 | **1220962** | Alfredo Ferreira |
 | **1220976** | Ricardo Dias     |
 
-## 2. Task Assignment
+## 3. Task Assignment
 
 The assignment of tasks (requirements/user stories/use cases) during the project.
 
